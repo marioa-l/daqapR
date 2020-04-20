@@ -9,8 +9,7 @@ import Table from 'react-bootstrap/Table'
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
 import {BrowserRouter, Link, NavLink, Redirect, Route, Switch} from 'react-router-dom'
-import AppDeLP from './delp'
-import AppDung from './dung'
+
 
 
 const containersStyleTEST = {
@@ -171,53 +170,28 @@ class NavVar extends React.Component{
 //   }
 // }
 
-// function App() {
-//   return (
-//     <Container fluid>
-//       <NavVar fluid/>
-//       <Row>
-//         <Col lg="4" style={containersStyleTEST}>
-//           <h6>Program</h6>
-//           <ProgramMenu/>
-//           <TextAreaProgram/>
-//           <AnalyzeProgramButton/>
-//         </Col>
-//         <Col lg="8" style={containersStyleTEST}><h6>DGraph</h6>
-//         </Col>
-//       </Row>
-//       {/* <Row>
-//         <Col>
-//           <TablesOfArguments/>
-//         </Col>
-//         <Col>
-//           <TablesOfArguments/>
-//         </Col>
-//       </Row>*/}
-//     </Container>
-//   )
-// }
-
-function App() {
+function AppDung() {
   return (
-    <BrowserRouter>
-        <Navbar bg="primary" variant="dark" expand="sm" style={{height:"40px"}}>
-          <Navbar.Brand as={Link} to="/">DAQAP (v2)</Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav"/>
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="mr-auto">
-              <Nav.Link as={NavLink} to="/page1">DeLP</Nav.Link>
-              <Nav.Link as={NavLink} to="/page2">Dung</Nav.Link>
-            </Nav>
-          </Navbar.Collapse>
-        </Navbar>
-        <Switch>
-          <Route exact path='/page1' component={AppDeLP}/>
-          <Route exact path='/page2' component={AppDung}/>
-          <Redirect from="/" to="/page1"/>
-        </Switch>
-    </BrowserRouter>
-  );
+    <Container fluid>
+      <Row>
+        <Col lg="4" style={containersStyleTEST}>
+          <h6>Program</h6>
+          <ProgramMenu/>
+          <TextAreaProgram/>
+        </Col>
+        <Col lg="8" style={containersStyleTEST}><h6>DGraph</h6>
+        </Col>
+      </Row>
+      {/* <Row>
+        <Col>
+          <TablesOfArguments/>
+        </Col>
+        <Col>
+          <TablesOfArguments/>
+        </Col>
+      </Row>*/}
+    </Container>
+  )
 }
 
-export default App;
-
+export default AppDung;
