@@ -1,4 +1,5 @@
 import React from 'react';
+import { examplePrograms } from './delp/examplePrograms';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
@@ -8,9 +9,11 @@ import Button from 'react-bootstrap/Button'
 import Table from 'react-bootstrap/Table'
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
+import VisNetwork from './visLib'
 import {BrowserRouter, Link, NavLink, Redirect, Route, Switch} from 'react-router-dom'
 
-
+const URLtoCore = 'http://localhost/daqapClient/bridge/bridge.php';
+const axios = require('axios');
 
 const containersStyleTEST = {
   border:"0px solid blue",
@@ -30,17 +33,40 @@ const textAreaProgramStyle = {
     marginTop: "5px"
 }
 
-function ExamplePrograms(){
-  return(
-    <Form.Control as="select" size="sm" custom>
-      <option>Example 1</option>
-      <option>Example 2</option>
-      <option>Example 3</option>
-      <option>Example 4</option>
-      <option>Example 5</option>
-    </Form.Control>
-  )
+class ExamplePrograms extends React.Component{
+  constructor(props){
+    super(props);
+    this.state={
+      selectedProgram:'0'
+    };
+    
+    this.handleChange = this.handleChange.bind(this)
+  };
+
+  handleChange(event, program){
+    this.setState({
+      selectedProgram:event.target.value
+    });
+    this.props.handleTextChange(program)
+  };
+
+  createSelectItems() {
+    let items = []      
+    for (var key in examplePrograms){
+      items.push(<option key={key} value={key}>Example {key}</option>); 
+    }
+    return items
+  }
+
+  render(){
+    return(
+      <Form.Control as="select" size="sm" custom value={this.state.selectedProgram}  onChange={(e)=>this.handleChange(e,examplePrograms[e.target.value])}>
+        {this.createSelectItems()}
+      </Form.Control>
+    )
 }
+}
+
 
 function SelectPreferenceCriterion(){
   return(
@@ -55,9 +81,38 @@ function SelectPreferenceCriterion(){
 }
 
 class AnalyzeProgramButton extends React.Component{
+
+  constructor(props){
+    super(props);
+    this.handleOnClick = this.handleOnClick.bind(this);
+    this.setResponse = this.setResponse.bind(this);
+  }
+
+  setResponse(response){
+    this.props.handleResponse(response);
+  }
+
+  handleOnClick(){
+    let self = this;
+    let delpProgram = this.props.program
+    let formData = new FormData();
+    formData.append('delp', delpProgram);
+    formData.append('version','2018');
+    formData.append('action','makeDelp');
+    // Show a loader?
+    axios.post(URLtoCore, formData)
+    .then(function (response) {
+      console.log(response.data);
+      self.setResponse(response.data);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+
   render(){
     return(
-      <Button variant="primary" size="md" block>
+      <Button variant="primary" size="md" block onClick={this.handleOnClick}>
         Analyze DeLP
       </Button> 
     )
@@ -65,11 +120,20 @@ class AnalyzeProgramButton extends React.Component{
 }
 
 class ProgramMenu extends React.Component{
+
+  constructor(props){
+    super(props);
+    this.handleChange = this.handleChange.bind(this)
+  };
+  handleChange(optionValue){
+    this.props.handleTextChange(optionValue)
+  };
+
   render(){
     return(
       <Container>
       <Row>
-        <Col md="6"><ExamplePrograms/></Col>
+        <Col md="6"><ExamplePrograms ref="selectPrograms" handleTextChange={this.handleChange}/></Col>
         <Col md="6"><Button variant="info" size="sm" block>Load from disk</Button></Col>
       </Row>
       <Row style={{marginTop:"3px"}}>
@@ -82,63 +146,25 @@ class ProgramMenu extends React.Component{
 }
 
 class TextAreaProgram extends React.Component{
+
+  constructor(props){
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(e){
+    this.props.handleTextChange(e.target.value)
+  }
+
   render(){
     return(
       <Form.Group controlId="exampleForm.ControlTextarea1">
-        <Form.Control as="textarea" rows="3" style={textAreaProgramStyle} spellcheck="false"/>
+        <Form.Control as="textarea" rows="3" style={textAreaProgramStyle} spellcheck="false" value={this.props.value} onChange={this.handleChange}/>
       </Form.Group>
     )
   }
 }
 
-class TablesOfArguments extends React.Component{
-  render(){
-    return(
-      <Table responsive size="sm" style={{marginTop:"4px"}}>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Table heading</th>
-            <th>Table heading</th>
-            <th>Table heading</th>
-            <th>Table heading</th>
-            <th>Table heading</th>
-            <th>Table heading</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>1</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-          </tr>
-          <tr>
-            <td>2</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-          </tr>
-          <tr>
-            <td>3</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-            <td>Table cell</td>
-          </tr>
-        </tbody>
-      </Table>
-    )
-  }
-}
 
 class NavVar extends React.Component{
   render(){
@@ -155,44 +181,43 @@ class NavVar extends React.Component{
   }
 }
 
-// class TabsNav extends React.Component{
-//   render(){
-//     return(
-//       <Tabs defaultActiveKey="profile" id="uncontrolled-tab-example" bg="primary">
-//         <Tab eventKey="home" title="Home">
-//           <ProgramMenu />
-//         </Tab>
-//         <Tab eventKey="profile" title="Profile">
-//           <TextAreaProgram />
-//         </Tab>
-//       </Tabs>
-//     )
-//   }
-// }
+class AppDeLP extends React.Component{
+  constructor(props){
+    super(props);
+    this.state={
+      delProgram: 'Null',
+      coreResponse: ''
+    };
+    this.handleProgramChange = this.handleProgramChange.bind(this);
+    this.handleResponse = this.handleResponse.bind(this);
+  }
 
-function AppDeLP() {
+  handleProgramChange(value){
+    this.setState({delProgram: value});
+  }
+
+  handleResponse(coreResponse){
+    this.setState({coreResponse: coreResponse});
+  }
+
+  render(){
   return (
     <Container fluid>
       <Row>
         <Col lg="4" style={containersStyleTEST}>
           <h6>Program</h6>
-          <ProgramMenu/>
-          <TextAreaProgram/>
-          <AnalyzeProgramButton/>
+          <ProgramMenu handleTextChange={this.handleProgramChange}/>
+          <TextAreaProgram value={this.state.delProgram} handleTextChange={this.handleProgramChange}/>
+          <AnalyzeProgramButton program={this.state.delProgram} handleResponse={this.handleResponse}/>
         </Col>
-        <Col lg="8" style={containersStyleTEST}><h6>DGraph</h6>
+        <Col lg="8" style={containersStyleTEST}>
+        <h6>DGraph</h6>
+          <VisNetwork delpGraph={this.state.coreResponse}/>
         </Col>
       </Row>
-      {/* <Row>
-        <Col>
-          <TablesOfArguments/>
-        </Col>
-        <Col>
-          <TablesOfArguments/>
-        </Col>
-      </Row>*/}
     </Container>
   )
+  }
 }
 
 export default AppDeLP;

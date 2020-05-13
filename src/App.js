@@ -201,7 +201,7 @@ function App() {
   return (
     <BrowserRouter>
         <Navbar bg="primary" variant="dark" expand="sm" style={{height:"40px"}}>
-          <Navbar.Brand as={Link} to="/">DAQAP (v2)</Navbar.Brand>
+          <Navbar.Brand as={Link} to="/">DAQAP (Devs)</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav"/>
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
