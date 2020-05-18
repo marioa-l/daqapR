@@ -186,7 +186,7 @@ class AppDeLP extends React.Component{
     super(props);
     this.state={
       delProgram: 'Null',
-      coreResponse: ''
+      coreResponse:'Null'
     };
     this.handleProgramChange = this.handleProgramChange.bind(this);
     this.handleResponse = this.handleResponse.bind(this);
@@ -197,7 +197,7 @@ class AppDeLP extends React.Component{
   }
 
   handleResponse(coreResponse){
-    this.setState({coreResponse: coreResponse});
+    this.setState({coreResponse:coreResponse});
   }
 
   render(){
