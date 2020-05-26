@@ -1,8 +1,10 @@
 import React, { Component, createRef } from "react";
+import * as utils from './delp/utilsDeLP';
 import { Network } from "vis-network/peer/esm/vis-network";
 import { DataSet } from "vis-data/peer/esm/vis-data"
 import Container from "react-bootstrap/Container";
 
+require("vis-network/dist/dist/vis-network.min.css");
 
 var nodes = new DataSet([
     {id: 1, label: 'Node 1'},
@@ -70,6 +72,7 @@ class VisNetwork extends React.Component{
 
     componentDidMount(){
         this.network = new Network(this.refs.myRef, data, options);
+        //Here define the associadted events with the network
     }
 
     loadDefeater(defeater, defeated){
@@ -83,8 +86,8 @@ class VisNetwork extends React.Component{
 
         //Load the defeats object
         defeatsObject.push({
-            'from': defeater['defeat'], //getFormatedArgumentBody
-            'to': defeated.id,
+            'from': utils.getFormatedArgumentBody(defeater['defeat']),
+            'to': utils.getFormatedArgumentBody(defeated.id),
             arrows: {
                 to: {
                     enabled: true,
@@ -110,8 +113,8 @@ class VisNetwork extends React.Component{
     loadSubargument(subargument, argument){
         if (subargument != argument.id) {
             subargumentsObject.push({
-                'from': subargument,
-                'to': argument.id,
+                'from': utils.getFormatedArgumentBody(subargument),
+                'to': utils.getFormatedArgumentBody(argument.id),
                 arrows: {
                     to: {
                         enabled: true,
@@ -132,7 +135,7 @@ class VisNetwork extends React.Component{
         args.map(argument => {
             let id = Object.keys(argument)[0];
             argumentsObject.push({
-                'id': id, //getFormatedArgumentBody
+                'id': utils.getFormatedArgumentBody(id),
                 'label': argument[id].conclusion,
                 'font': {
                     color: 'black',
@@ -140,7 +143,7 @@ class VisNetwork extends React.Component{
                     vadjust: -130,
                     align: 'center'
                 },
-                'title': argument[id].id,
+                'title': utils.getFormatedArgumentBody(argument[id].id),
                 'shape': 'triangle',
                 'size': '40'
             });
@@ -169,7 +172,7 @@ class VisNetwork extends React.Component{
 
     render(){
         return(
-            <Container ref="myRef" style={{height: "85vh", border: "3px solid grey"}} fluid></Container>
+            <div ref="myRef" style={{height: "84vh", borderTop: "3px solid grey", backgroundColor: "#F4F7FF"}}></div>
         )
     }
 }

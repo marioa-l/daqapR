@@ -1,24 +1,24 @@
 import React from 'react';
 import { examplePrograms } from './delp/examplePrograms';
+import Generators from './generators/generators';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import Table from 'react-bootstrap/Table'
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
 import VisNetwork from './visLib'
-import {BrowserRouter, Link, NavLink, Redirect, Route, Switch} from 'react-router-dom'
+
 
 const URLtoCore = 'http://localhost/daqapClient/bridge/bridge.php';
 const axios = require('axios');
 
 const containersStyleTEST = {
-  border:"0px solid blue",
   fontSize: "15px",
-  marginTop:"20px"
+  marginTop: "20px",
+  width: "100%"
 }
 
 const rowStyleButtonsTEST = {
@@ -28,7 +28,7 @@ const rowStyleButtonsTEST = {
 const textAreaProgramStyle = {
     resize: "none",
     fontFamily: "Consolas",
-    fontSize: "18px",
+    fontSize: "14px",
     height: "65vh",
     marginTop: "5px"
 }
@@ -37,7 +37,7 @@ class ExamplePrograms extends React.Component{
   constructor(props){
     super(props);
     this.state={
-      selectedProgram:'0'
+      selectedProgram:'-1'
     };
     
     this.handleChange = this.handleChange.bind(this)
@@ -51,16 +51,17 @@ class ExamplePrograms extends React.Component{
   };
 
   createSelectItems() {
-    let items = []      
+    let items = [];
+    items.push(<option key={-1} value="Write your program or select one of the examples.">Select an example</option>);      
     for (var key in examplePrograms){
-      items.push(<option key={key} value={key}>Example {key}</option>); 
+      items.push(<option key={key} value={examplePrograms[key]}>Example {key}</option>); 
     }
     return items
   }
 
   render(){
     return(
-      <Form.Control as="select" size="sm" custom value={this.state.selectedProgram}  onChange={(e)=>this.handleChange(e,examplePrograms[e.target.value])}>
+      <Form.Control as="select" size="sm" custom value={this.state.selectedProgram}  onChange={(e)=>this.handleChange(e,e.target.value)}>
         {this.createSelectItems()}
       </Form.Control>
     )
@@ -72,8 +73,8 @@ function SelectPreferenceCriterion(){
   return(
     <Container>
       <Row>
-          <Button variant="secondary" size="sm" block>
-            Preference Criterion
+          <Button variant="primary" size="sm" block>
+            Pref. Criterion
           </Button>
       </Row>
     </Container>
@@ -131,16 +132,16 @@ class ProgramMenu extends React.Component{
 
   render(){
     return(
-      <Container>
+      <div>
       <Row>
         <Col md="6"><ExamplePrograms ref="selectPrograms" handleTextChange={this.handleChange}/></Col>
-        <Col md="6"><Button variant="info" size="sm" block>Load from disk</Button></Col>
+        <Col md="6"><Button variant="primary" size="sm" block>Load</Button></Col>
       </Row>
       <Row style={{marginTop:"3px"}}>
-        <Col md="6"><Button variant="info" size="sm" block>Generate randomly</Button></Col>
+        <Col md="6"><Generators showGeneratedProgram={this.handleChange}/></Col>
         <Col md="6"><SelectPreferenceCriterion /></Col>
       </Row>
-      </Container>
+      </div>
     )
   }
 }
@@ -159,7 +160,7 @@ class TextAreaProgram extends React.Component{
   render(){
     return(
       <Form.Group controlId="exampleForm.ControlTextarea1">
-        <Form.Control as="textarea" rows="3" style={textAreaProgramStyle} spellcheck="false" value={this.props.value} onChange={this.handleChange}/>
+        <Form.Control as="textarea" style={textAreaProgramStyle} spellcheck="false" value={this.props.value} onChange={this.handleChange}/>
       </Form.Group>
     )
   }
@@ -185,7 +186,7 @@ class AppDeLP extends React.Component{
   constructor(props){
     super(props);
     this.state={
-      delProgram: 'Null',
+      delProgram: '',
       coreResponse:'Null'
     };
     this.handleProgramChange = this.handleProgramChange.bind(this);
@@ -204,15 +205,19 @@ class AppDeLP extends React.Component{
   return (
     <Container fluid>
       <Row>
-        <Col lg="4" style={containersStyleTEST}>
+        <Col lg="3" style={containersStyleTEST}>
           <h6>Program</h6>
           <ProgramMenu handleTextChange={this.handleProgramChange}/>
           <TextAreaProgram value={this.state.delProgram} handleTextChange={this.handleProgramChange}/>
           <AnalyzeProgramButton program={this.state.delProgram} handleResponse={this.handleResponse}/>
         </Col>
-        <Col lg="8" style={containersStyleTEST}>
+        <Col lg="5" style={containersStyleTEST}>
         <h6>DGraph</h6>
           <VisNetwork delpGraph={this.state.coreResponse}/>
+        </Col>
+        <Col lg="4" style={containersStyleTEST}>
+        <h6>Dialectical Tree</h6>
+        <VisNetwork delpGraph={this.state.coreResponse}/>
         </Col>
       </Row>
     </Container>
