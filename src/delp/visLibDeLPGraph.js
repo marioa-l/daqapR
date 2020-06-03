@@ -1,26 +1,17 @@
-import React, { Component, createRef } from "react";
-import * as utils from './delp/utilsDeLP';
+import React from "react";
+import * as utils from './utilsDeLP';
 import { Network } from "vis-network/peer/esm/vis-network";
 import { DataSet } from "vis-data/peer/esm/vis-data"
 import Container from "react-bootstrap/Container";
+import { Col, Row } from "react-bootstrap";
+import VisLibTrees from "./visLibTrees";
 
 require("vis-network/dist/dist/vis-network.min.css");
 
-var nodes = new DataSet([
-    {id: 1, label: 'Node 1'},
-    {id: 2, label: 'Node 2'},
-    {id: 3, label: 'Node 3'},
-    {id: 4, label: 'Node 4'},
-    {id: 5, label: 'Node 5'}
-]);
+var nodes = new DataSet();
 
 // create an array with edges
-var edges = new DataSet([
-    {from: 1, to: 3},
-    {from: 1, to: 2},
-    {from: 2, to: 4},
-    {from: 2, to: 5}
-]);
+var edges = new DataSet();
 
 var data = {
     nodes: nodes,
@@ -59,30 +50,66 @@ var subargumentsObject = [];
 var defeatsObject = [];
 // initialize your network!
 
+function RenderTree(props) {
+    if(props.selectedArgument !== ''){
+        return(
+            <Container fluid>
+            <h6>Tree</h6>
+            <VisLibTrees data={props}></VisLibTrees>
+            </Container>
+        )
+    }else{
+        return <h6>No argument selected</h6>
+    }
+}
 
-class VisNetwork extends React.Component{
+class VisNetworkDeLPGraph extends React.Component{
     constructor(props){
         super(props);
+        this.state={
+            selectedArgument:''
+        };
+        this.myDeLPGraphNetwork = React.createRef();
         this.updateNetwork = this.updateNetwork.bind(this);
         this.loadArguments = this.loadArguments.bind(this);
         this.loadDefeater = this.loadDefeater.bind(this);
         this.loadSubargument = this.loadSubargument.bind(this);
+        this.dGraphNetworkEvents = this.dGraphNetworkEvents.bind(this);
+        
         this.network = {};
+        this.selectedArgument = '';
+    }
+
+    dGraphNetworkEvents(){
+        let self = this;
+        //Here define the associadted events with the network
+        this.network.on("click", function (params) {
+            let selectedArgument = params.nodes[0];
+            if(selectedArgument){
+                self.setState({
+                    selectedArgument:selectedArgument
+                });
+            }else{
+                self.setState({
+                    selectedArgument:''
+                })
+            }
+        });
     }
 
     componentDidMount(){
-        this.network = new Network(this.refs.myRef, data, options);
-        //Here define the associadted events with the network
+        this.network = new Network(this.myDeLPGraphNetwork.current, data, options);
+        this.dGraphNetworkEvents();
     }
 
     loadDefeater(defeater, defeated){
         let defeatType;
         let arcLabel;
         //To set the type of defeat (proper or blocking) Check this!
-        defeater['defeaterType'] == 'proper' ? defeatType = true : defeatType = false;
+        defeater['defeaterType'] === 'proper' ? defeatType = true : defeatType = false;
 
         //To set the type of attack (conclusion or internal)
-        defeater['innerPoint'] == defeated.conclusion ? arcLabel = 'C' : arcLabel = 'I';
+        defeater['innerPoint'] === defeated.conclusion ? arcLabel = 'C' : arcLabel = 'I';
 
         //Load the defeats object
         defeatsObject.push({
@@ -111,7 +138,7 @@ class VisNetwork extends React.Component{
     }
 
     loadSubargument(subargument, argument){
-        if (subargument != argument.id) {
+        if (subargument !== argument.id) {
             subargumentsObject.push({
                 'from': utils.getFormatedArgumentBody(subargument),
                 'to': utils.getFormatedArgumentBody(argument.id),
@@ -162,6 +189,9 @@ class VisNetwork extends React.Component{
                                 this.loadArguments(literal[key]);
                                 });
         this.network.setData({nodes: argumentsObject, edges:defeatsObject.concat(subargumentsObject)});
+        this.setState({
+            selectedArgument:''
+        });
     }
 
     componentDidUpdate(prevProps){
@@ -172,10 +202,24 @@ class VisNetwork extends React.Component{
 
     render(){
         return(
-            <div ref="myRef" style={{height: "84vh", borderTop: "3px solid grey", backgroundColor: "#F4F7FF"}}></div>
+            
+                <Row>
+                    <Col lg="8">
+                    <h6>DeLP Graph</h6>
+                        <div ref={this.myDeLPGraphNetwork} style={{height: "84vh", borderTop: "3px solid grey", backgroundColor: "#F4F7FF"}}></div>
+                    </Col>
+                    <Col lg="4">
+                    <RenderTree selectedArgument = {this.state.selectedArgument} 
+                                treeCoreResponse = {this.props.delpGraph.status} 
+                                argumentsObject = {argumentsObject} 
+                                defeatsObject={defeatsObject}/>
+                    </Col>
+                </Row>
+            
+            
         )
     }
 }
 
 
-export default VisNetwork
+export default VisNetworkDeLPGraph;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { examplePrograms } from './delp/examplePrograms';
+import { examplePrograms } from './examplePrograms';
 import Generators from './generators/generators';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Container from 'react-bootstrap/Container'
@@ -7,9 +7,7 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import Navbar from 'react-bootstrap/Navbar'
-import Nav from 'react-bootstrap/Nav'
-import VisNetwork from './visLib'
+import VisNetworkDeLPGraph from './visLibDeLPGraph'
 
 
 const URLtoCore = 'http://localhost/daqapClient/bridge/bridge.php';
@@ -19,10 +17,6 @@ const containersStyleTEST = {
   fontSize: "15px",
   marginTop: "20px",
   width: "100%"
-}
-
-const rowStyleButtonsTEST = {
-  marginTop:"2px"
 }
 
 const textAreaProgramStyle = {
@@ -134,7 +128,7 @@ class ProgramMenu extends React.Component{
     return(
       <div>
       <Row>
-        <Col md="6"><ExamplePrograms ref="selectPrograms" handleTextChange={this.handleChange}/></Col>
+        <Col md="6"><ExamplePrograms handleTextChange={this.handleChange}/></Col>
         <Col md="6"><Button variant="primary" size="sm" block>Load</Button></Col>
       </Row>
       <Row style={{marginTop:"3px"}}>
@@ -160,27 +154,12 @@ class TextAreaProgram extends React.Component{
   render(){
     return(
       <Form.Group controlId="exampleForm.ControlTextarea1">
-        <Form.Control as="textarea" style={textAreaProgramStyle} spellcheck="false" value={this.props.value} onChange={this.handleChange}/>
+        <Form.Control as="textarea" style={textAreaProgramStyle} spellCheck="false" value={this.props.value} onChange={this.handleChange}/>
       </Form.Group>
     )
   }
 }
 
-
-class NavVar extends React.Component{
-  render(){
-    return(
-      <Navbar bg="primary" variant="dark" style={{height:"40px"}}>
-      <Navbar.Brand href="#home">DAQAP (v2)</Navbar.Brand>
-      <Nav className="mr-auto">
-        <Nav.Link href="#home" active>DeLP</Nav.Link>
-        <Nav.Link href="#features">Dung</Nav.Link>
-        <Nav.Link href="#pricing">Others</Nav.Link>
-      </Nav>
-    </Navbar>
-    )
-  }
-}
 
 class AppDeLP extends React.Component{
   constructor(props){
@@ -211,13 +190,8 @@ class AppDeLP extends React.Component{
           <TextAreaProgram value={this.state.delProgram} handleTextChange={this.handleProgramChange}/>
           <AnalyzeProgramButton program={this.state.delProgram} handleResponse={this.handleResponse}/>
         </Col>
-        <Col lg="5" style={containersStyleTEST}>
-        <h6>DGraph</h6>
-          <VisNetwork delpGraph={this.state.coreResponse}/>
-        </Col>
-        <Col lg="4" style={containersStyleTEST}>
-        <h6>Dialectical Tree</h6>
-        <VisNetwork delpGraph={this.state.coreResponse}/>
+        <Col lg="9" style={containersStyleTEST}>
+          <VisNetworkDeLPGraph delpGraph={this.state.coreResponse}/>
         </Col>
       </Row>
     </Container>

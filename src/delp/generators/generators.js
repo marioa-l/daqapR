@@ -93,10 +93,10 @@ class Generator2Form extends React.Component{
     // Show a loader?
     axios.post(URLtoCore, formData)
     .then(function (response) {
-      if(response.data == 0){
+      if(response.data === 0){
         console.log("Error to generate program");
         self.handleGeneratedProgram("Error to generate program");
-      }else if(response.data == 1){
+      }else if(response.data === 1){
         console.log("Timeout to generate program");
         self.handleGeneratedProgram("Timeout to generate program");
       }else{
@@ -224,10 +224,10 @@ class Generator1Form extends React.Component{
     // Show a loader?
     axios.post(URLtoCore, formData)
     .then(function (response) {
-      if(response.data == 0){
+      if(response.data === 0){
         console.log("Error to generate program");
         self.handleGeneratedProgram("Error to generate program");
-      }else if(response.data == 1){
+      }else if(response.data === 1){
         console.log("Timeout to generate program");
         self.handleGeneratedProgram("Timeout to generate program");
       }else{
