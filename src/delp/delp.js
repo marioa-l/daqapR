@@ -1,5 +1,6 @@
 import React from 'react';
 import { examplePrograms } from './examplePrograms';
+import { generate_graph_structures, generate_tree_graph_structures} from "./DataParsing";
 import Generators from './generators/generators';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Container from 'react-bootstrap/Container'
@@ -8,9 +9,10 @@ import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import VisNetworkDeLPGraph from './visLibDeLPGraph'
-
+import VisLibTrees from "./visLibTrees";
 
 const URLtoCore = 'http://localhost/daqapClient/bridge/bridge.php';
+
 const axios = require('axios');
 
 const containersStyleTEST = {
@@ -31,22 +33,29 @@ class ExamplePrograms extends React.Component{
   constructor(props){
     super(props);
     this.state={
-      selectedProgram:'-1'
+      selectedProgram:"0"
     };
-    
     this.handleChange = this.handleChange.bind(this)
+    this.refExample = React.createRef();
   };
+
+  componentDidMount() {
+    this.setState({
+      selectedProgram:examplePrograms["0"]
+    });
+    this.props.handleTextChange(examplePrograms["0"]);
+  }
 
   handleChange(event, program){
     this.setState({
       selectedProgram:event.target.value
     });
-    this.props.handleTextChange(program)
+    this.props.handleTextChange(program);
   };
 
   createSelectItems() {
     let items = [];
-    items.push(<option key={-1} value="Write your program or select one of the examples.">Select an example</option>);      
+    items.push(<option key={-1} value="Write your program or select one of the examples.">Select an example</option>);
     for (var key in examplePrograms){
       items.push(<option key={key} value={examplePrograms[key]}>Example {key}</option>); 
     }
@@ -55,13 +64,14 @@ class ExamplePrograms extends React.Component{
 
   render(){
     return(
-      <Form.Control as="select" size="sm" custom value={this.state.selectedProgram}  onChange={(e)=>this.handleChange(e,e.target.value)}>
+      <Form.Control as="select" size="sm" custom value={this.state.selectedProgram}
+                    onChange={(e)=>this.handleChange(e,e.target.value)}
+                    ref={this.refExample}>
         {this.createSelectItems()}
       </Form.Control>
     )
 }
 }
-
 
 function SelectPreferenceCriterion(){
   return(
@@ -81,15 +91,20 @@ class AnalyzeProgramButton extends React.Component{
     super(props);
     this.handleOnClick = this.handleOnClick.bind(this);
     this.setResponse = this.setResponse.bind(this);
+    this.AnalyzeButtonRef = React.createRef();
   }
 
   setResponse(response){
     this.props.handleResponse(response);
   }
 
+  componentDidMount() {
+    this.AnalyzeButtonRef.current.click();
+  }
+
   handleOnClick(){
     let self = this;
-    let delpProgram = this.props.program
+    let delpProgram = this.props.program;
     let formData = new FormData();
     formData.append('delp', delpProgram);
     formData.append('version','2018');
@@ -97,7 +112,7 @@ class AnalyzeProgramButton extends React.Component{
     // Show a loader?
     axios.post(URLtoCore, formData)
     .then(function (response) {
-      console.log(response.data);
+      console.log("Core Response: ", response.data);
       self.setResponse(response.data);
     })
     .catch(function (error) {
@@ -107,7 +122,7 @@ class AnalyzeProgramButton extends React.Component{
 
   render(){
     return(
-      <Button variant="primary" size="md" block onClick={this.handleOnClick}>
+      <Button variant="primary" size="md" block onClick={this.handleOnClick} ref={this.AnalyzeButtonRef}>
         Analyze DeLP
       </Button> 
     )
@@ -160,24 +175,43 @@ class TextAreaProgram extends React.Component{
   }
 }
 
-
 class AppDeLP extends React.Component{
   constructor(props){
     super(props);
     this.state={
-      delProgram: '',
-      coreResponse:'Null'
+      delpProgram: examplePrograms["0"],
+      coreResponse:'',
+      dGraph: '',
+      trees: '',
+      selectedArgument:''
     };
     this.handleProgramChange = this.handleProgramChange.bind(this);
     this.handleResponse = this.handleResponse.bind(this);
+    this.handleSelectedArgument = this.handleSelectedArgument.bind(this);
   }
 
   handleProgramChange(value){
-    this.setState({delProgram: value});
+    this.setState({delpProgram: value});
   }
 
   handleResponse(coreResponse){
-    this.setState({coreResponse:coreResponse});
+    let structures = generate_graph_structures(coreResponse.dGraph);
+    let trees = generate_tree_graph_structures(coreResponse.status);
+    this.setState({
+      coreResponse: coreResponse,
+      dGraph: structures,
+      trees: trees,
+      selectedArgument: Object.keys(trees)[0]
+    });
+  }
+
+  handleSelectedArgument(selectedArgument){
+    if(selectedArgument !== this.state.selectedArgument){
+      console.log("Selected argument: ", selectedArgument);
+      this.setState({
+        selectedArgument: selectedArgument
+      });
+    }
   }
 
   render(){
@@ -187,11 +221,17 @@ class AppDeLP extends React.Component{
         <Col lg="3" style={containersStyleTEST}>
           <h6>Program</h6>
           <ProgramMenu handleTextChange={this.handleProgramChange}/>
-          <TextAreaProgram value={this.state.delProgram} handleTextChange={this.handleProgramChange}/>
-          <AnalyzeProgramButton program={this.state.delProgram} handleResponse={this.handleResponse}/>
+          <TextAreaProgram value={this.state.delpProgram}
+                           handleTextChange={this.handleProgramChange}/>
+          <AnalyzeProgramButton program={this.state.delpProgram}
+                                handleResponse={this.handleResponse}/>
         </Col>
-        <Col lg="9" style={containersStyleTEST}>
-          <VisNetworkDeLPGraph delpGraph={this.state.coreResponse}/>
+        <Col lg="5" style={containersStyleTEST}>
+          <VisNetworkDeLPGraph delpGraph = {this.state.dGraph}
+                               handleNotifyArgumentSelected = {this.handleSelectedArgument}/>
+        </Col>
+        <Col lg="4" style={containersStyleTEST} fluid>
+          <VisLibTrees selectedArgument = {this.state.trees[this.state.selectedArgument]}/>
         </Col>
       </Row>
     </Container>
