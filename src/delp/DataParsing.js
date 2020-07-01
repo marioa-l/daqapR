@@ -4,6 +4,7 @@ import * as utils from "./utilsDeLP";
 let argumentsObject = [];
 let subargumentsObject = [];
 let defeatsObject = [];
+let argIndex = 0;
 
 // Build the Defeats object for the DeLP Graph
 function load_defeaters(defeater, defeated) {
@@ -69,7 +70,7 @@ function load_arguments(args) {
         let id = Object.keys(argument)[0];
         argumentsObject.push({
             'id': utils.getFormatedArgumentBody(id),
-            'label': argument[id].conclusion,
+            'label': argument[id].conclusion + '\n\n\n' + argIndex,
             'font': {
                 color: 'black',
                 size: 28,
@@ -82,6 +83,7 @@ function load_arguments(args) {
         });
         argument[id].defeats.map(defeater => load_defeaters(defeater, argument[id]));
         argument[id].subarguments.map(subargument => load_subarguments(subargument, argument[id]));
+        argIndex = argIndex + 1;
     })
 }
 
@@ -92,6 +94,7 @@ export function generate_graph_structures(jsonCoreResponseDGraph) {
     argumentsObject = [];
     subargumentsObject = [];
     defeatsObject = [];
+    argIndex = 0;
 
     jsonCoreResponseDGraph.map(literal => {
         let key = Object.keys(literal)[0];
@@ -273,6 +276,12 @@ export function generate_tree_graph_structures(jsonCoreResponseStatus) {
         trees[root] = get_dialectical_tree(root);
     }
 
-    return trees;
+    let labeledArguments = []
+    argumentsObject.map(argument => {
+        argument.color = trees[argument.id].nodes[0].color;
+        labeledArguments.push(argument)
+    });
+
+    return [trees, labeledArguments];
 }
 

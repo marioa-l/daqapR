@@ -9,12 +9,12 @@ import AppDeLP from './delp/delp'
 function App() {
   return (
     <BrowserRouter>
-        <Navbar bg="primary" variant="dark" expand="sm" style={{height:"40px"}}>
-          <Navbar.Brand as={Link} to="/">DAQAP (Devs)</Navbar.Brand>
+        <Navbar expand="sm" style={{height:"30px", backgroundColor: '#337ab7'}}>
+          <Navbar.Brand as={Link} to="/" style={{color:'white'}}>DAQAP (Devs)</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav"/>
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
-              <Nav.Link as={NavLink} to="/page1">DeLP</Nav.Link>
+              <Nav.Link as={NavLink} to="/page1" style={{color:'white'}}>DeLP</Nav.Link>
               {/* <Nav.Link as={NavLink} to="/page2">Dung</Nav.Link> */}
             </Nav>
           </Navbar.Collapse>

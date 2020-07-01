@@ -16,10 +16,11 @@ const URLtoCore = 'http://localhost/daqapClient/bridge/bridge.php';
 const axios = require('axios');
 
 const containersStyleTEST = {
-  fontSize: "15px",
-  marginTop: "20px",
+  marginTop: "10px",
   width: "100%"
 }
+
+
 
 const textAreaProgramStyle = {
     resize: "none",
@@ -77,7 +78,7 @@ function SelectPreferenceCriterion(){
   return(
     <Container>
       <Row>
-          <Button variant="primary" size="sm" block>
+          <Button style={{backgroundColor:'#337ab7', border:'0px'}} size="sm" block>
             Pref. Criterion
           </Button>
       </Row>
@@ -122,7 +123,7 @@ class AnalyzeProgramButton extends React.Component{
 
   render(){
     return(
-      <Button variant="primary" size="md" block onClick={this.handleOnClick} ref={this.AnalyzeButtonRef}>
+      <Button style={{backgroundColor:'#337ab7', border:'0px'}} size="md" block onClick={this.handleOnClick} ref={this.AnalyzeButtonRef}>
         Analyze DeLP
       </Button> 
     )
@@ -144,7 +145,7 @@ class ProgramMenu extends React.Component{
       <div>
       <Row>
         <Col md="6"><ExamplePrograms handleTextChange={this.handleChange}/></Col>
-        <Col md="6"><Button variant="primary" size="sm" block>Load</Button></Col>
+        <Col md="6"><Button style={{backgroundColor:'#337ab7', border:'0px'}} size="sm" block>Load</Button></Col>
       </Row>
       <Row style={{marginTop:"3px"}}>
         <Col md="6"><Generators showGeneratedProgram={this.handleChange}/></Col>
@@ -199,9 +200,13 @@ class AppDeLP extends React.Component{
     let trees = generate_tree_graph_structures(coreResponse.status);
     this.setState({
       coreResponse: coreResponse,
-      dGraph: structures,
-      trees: trees,
-      selectedArgument: Object.keys(trees)[0]
+      dGraph: {
+        argumentsObject: trees[1],
+        defeatsObject: structures.defeatsObject,
+        subArgumentsObject: structures.subArgumentsObject
+      },
+      trees: trees[0],
+      selectedArgument: Object.keys(trees[0])[0]
     });
   }
 
@@ -219,7 +224,7 @@ class AppDeLP extends React.Component{
     <Container fluid>
       <Row>
         <Col lg="3" style={containersStyleTEST}>
-          <h6>Program</h6>
+          <label>Program</label>
           <ProgramMenu handleTextChange={this.handleProgramChange}/>
           <TextAreaProgram value={this.state.delpProgram}
                            handleTextChange={this.handleProgramChange}/>

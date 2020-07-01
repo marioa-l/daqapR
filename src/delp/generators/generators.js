@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
-import { Form, Col } from 'react-bootstrap';
+import {Col, Form} from 'react-bootstrap';
 
 
 const URLtoCore = 'http://localhost/daqapClient/bridge/bridge.php';
@@ -71,16 +71,15 @@ class Generator2Form extends React.Component{
   }
 
   getParams(){
-    let params = {
-        "nPosLiterals" : parseInt(this.inputPosLit.current.value),
-        "nNegLiterals" : parseInt(this.inputNegLit.current.value),
-        "maxStrictLiterals" : parseInt(this.inputMaxSRules.current.value),
+      return {
+        "nPosLiterals": parseInt(this.inputPosLit.current.value),
+        "nNegLiterals": parseInt(this.inputNegLit.current.value),
+        "maxStrictLiterals": parseInt(this.inputMaxSRules.current.value),
         "nestingLevel": parseInt(this.inputNestingLevel.current.value),
-        "bodyLength" : parseInt(this.inputBodyLentgh.current.value),
-        "headPerLiteral" : parseInt(this.inputHeads.current.value),
-        "properDefeatProb" : 0.5
+        "bodyLength": parseInt(this.inputBodyLentgh.current.value),
+        "headPerLiteral": parseInt(this.inputHeads.current.value),
+        "properDefeatProb": 0.5
     };
-    return params;
   }
 
   generateClick(params){
@@ -101,7 +100,7 @@ class Generator2Form extends React.Component{
         self.handleGeneratedProgram("Timeout to generate program");
       }else{
         //console.log(response.data);
-        let program = response.data.replace(/[\[\]\']/g,'').replace(/(\., )/g,".\n");
+        let program = response.data.replace(/[\[\]']/g,'').replace(/(\., )/g,".\n");
         self.handleGeneratedProgram(program);
       }
     })
@@ -198,21 +197,20 @@ class Generator1Form extends React.Component{
   }
 
   getParams(){
-    let params = {
-      "nPrograms" : 1, //Number of program to generate
-      "nLiterals" : parseInt(this.inputLit.current.value), //Max number of literals
-      "nNegLiterals" : parseInt(this.inputNLit.current.value), //Max number of negative literals
-      "nFacts" : parseInt(this.inputFacts.current.value), //Max number of facts
-      "minNDifHeads" : parseInt(this.inputMinHeads.current.value), //Min number of differente heads
-      "maxNDifHeads" : parseInt(this.inputMaxHeads.current.value), //Max number of differente heads,
-      "minNDifRules" : parseInt(this.inputMinRules.current.value), //Min number of rules
-      "maxNDifRules" : parseInt(this.inputMaxRules.current.value), //Max number of rules,
-      "maxNStrictsRules" : parseInt(this.inputSRules.current.value), //Max number of strict rules
-      "minNRulesInBody" : parseInt(this.inputMinBodyLiterals.current.value), //Min number of literals in bodies
-      "maxNRulesInBody" : parseInt(this.inputMaxBodyLiterals.current.value), //Max number of literals in bodies
-      "maxAssocLevel" : parseInt(this.inputAssocLevel.current.value) //Association Level
+      return {
+        "nPrograms": 1, //Number of program to generate
+        "nLiterals": parseInt(this.inputLit.current.value), //Max number of literals
+        "nNegLiterals": parseInt(this.inputNLit.current.value), //Max number of negative literals
+        "nFacts": parseInt(this.inputFacts.current.value), //Max number of facts
+        "minNDifHeads": parseInt(this.inputMinHeads.current.value), //Min number of differente heads
+        "maxNDifHeads": parseInt(this.inputMaxHeads.current.value), //Max number of differente heads,
+        "minNDifRules": parseInt(this.inputMinRules.current.value), //Min number of rules
+        "maxNDifRules": parseInt(this.inputMaxRules.current.value), //Max number of rules,
+        "maxNStrictsRules": parseInt(this.inputSRules.current.value), //Max number of strict rules
+        "minNRulesInBody": parseInt(this.inputMinBodyLiterals.current.value), //Min number of literals in bodies
+        "maxNRulesInBody": parseInt(this.inputMaxBodyLiterals.current.value), //Max number of literals in bodies
+        "maxAssocLevel": parseInt(this.inputAssocLevel.current.value) //Association Level
     };
-    return params;
   }
 
   generateClick(params){
@@ -232,7 +230,7 @@ class Generator1Form extends React.Component{
         self.handleGeneratedProgram("Timeout to generate program");
       }else{
         //console.log(response.data);
-        let program = response.data.replace(/[\[\]\']/g,'').replace(/(\., )/g,".\n");
+        let program = response.data.replace(/[\[\]']/g,'').replace(/(\., )/g,".\n");
         self.handleGeneratedProgram(program);
       }
     })
@@ -374,7 +372,7 @@ function GeneratorsModal(props){
     
     return (
       <>
-        <Button variant="primary" size="sm" onClick={() => setModalShow(true)} block>
+        <Button style={{backgroundColor:'#337ab7', border:'0px'}} size="sm" onClick={() => setModalShow(true)} block>
           Generators
         </Button>
   
