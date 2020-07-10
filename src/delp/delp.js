@@ -235,7 +235,7 @@ class AppDeLP extends React.Component{
           <VisNetworkDeLPGraph delpGraph = {this.state.dGraph}
                                handleNotifyArgumentSelected = {this.handleSelectedArgument}/>
         </Col>
-        <Col lg="4" style={containersStyleTEST} fluid>
+        <Col lg="4" style={containersStyleTEST}>
           <VisLibTrees selectedArgument = {this.state.trees[this.state.selectedArgument]}/>
         </Col>
       </Row>
