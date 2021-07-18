@@ -2,8 +2,12 @@ import * as utils from "./utilsDeLP";
 
 // Global structures
 let argumentsObject = [];
+let argumentsObjectDung = [];
 let subargumentsObject = [];
 let defeatsObject = [];
+let defeatsObjectDung = [];
+let argumentsDung = {}; //Ids:Arguement
+let attacksDung = []; //Tuples of (from, to)
 let argIndex = 0;
 
 // Build the Defeats object for the DeLP Graph
@@ -40,6 +44,9 @@ function load_defeaters(defeater, defeated) {
             align: 'top'
         }
     });
+    
+    
+    	
 }
 
 // Build the SubArguments object for the DeLP Graph
@@ -81,10 +88,24 @@ function load_arguments(args) {
             'shape': 'triangle',
             'size': '40'
         });
+	argumentsObjectDung.push({
+            'id': argIndex,
+            'label': argument[id].conclusion + '\n\n' + argIndex,
+            'font': {
+                color: 'black',
+                size: 28,
+                vadjust: -130,
+                align: 'center'
+            },
+            'title': utils.getFormatedArgumentBody(argument[id].id),
+            'shape': 'dot',
+            'size': '40'
+        });
+	argumentsDung[utils.getFormatedArgumentBody(id)]=argIndex;    
         argument[id].defeats.map(defeater => load_defeaters(defeater, argument[id]));
         argument[id].subarguments.map(subargument => load_subarguments(subargument, argument[id]));
         argIndex = argIndex + 1;
-    })
+    });
 }
 
 // This function take the DeLP Core response and generate
@@ -92,19 +113,30 @@ function load_arguments(args) {
 export function generate_graph_structures(jsonCoreResponseDGraph) {
     console.log("Parsing DeLP Core response (DGraph)...")
     argumentsObject = [];
+    argumentsObjectDung = [];
     subargumentsObject = [];
     defeatsObject = [];
+    defeatsObjectDung = [];
+    argumentsDung = {};
+    attacksDung = [];	
     argIndex = 0;
 
     jsonCoreResponseDGraph.map(literal => {
         let key = Object.keys(literal)[0];
         load_arguments(literal[key]);
     });
-
-    return {
+	defeatsObject.map(attack => {
+		attacksDung.push('('+ argumentsDung[attack['from']]  +','+ argumentsDung[attack['to']]  +')');
+		defeatsObjectDung.push({'from':argumentsDung[attack['from']], 'to':argumentsDung[attack['to']], 'arrows':'to', 'width':3})
+	});
+	return {
         'argumentsObject': argumentsObject,
+	'argumentsObjectDung': argumentsObjectDung,    
         'subArgumentsObject': subargumentsObject,
-        'defeatsObject': defeatsObject
+        'defeatsObject': defeatsObject,
+	'defeatsObjectDung': defeatsObjectDung,
+	'argumentsDung': Object.values(argumentsDung),
+	'attacksDung': attacksDung    
     };
 }
 
@@ -261,7 +293,7 @@ function get_dialectical_tree(root) {
     };
 }
 
-// This function tale the DeLP Core response and generate
+// This function take the DeLP Core response and generate
 // the structures to draw the tree graphs
 export function generate_tree_graph_structures(jsonCoreResponseStatus) {
     console.log("Parsing DeLP Core response (Trees)...");

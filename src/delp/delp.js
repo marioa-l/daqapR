@@ -100,7 +100,7 @@ class AnalyzeProgramButton extends React.Component{
   }
 
   componentDidMount() {
-    this.AnalyzeButtonRef.current.click();
+   this.AnalyzeButtonRef.current.click();
   }
 
   handleOnClick(){
@@ -203,11 +203,18 @@ class AppDeLP extends React.Component{
       dGraph: {
         argumentsObject: trees[1],
         defeatsObject: structures.defeatsObject,
+	defeatsObjectDung: structures.defeatsObjectDung,      
         subArgumentsObject: structures.subArgumentsObject
       },
       trees: trees[0],
       selectedArgument: Object.keys(trees[0])[0]
     });
+  	this.props.handleGlobalResponseChange({
+	  argumentsObjectDung: structures.argumentsObjectDung,
+	  defeatsObjectDung: structures.defeatsObjectDung,
+	  argumentsDung: structures.argumentsDung,
+	  attacksDung: structures.attacksDung	
+  });	  
   }
 
   handleSelectedArgument(selectedArgument){
