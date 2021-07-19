@@ -54,7 +54,8 @@ class VisNetworkDungGraphExtensions extends React.Component{
     
     componentDidMount(){
         this.network = new Network(this.myDungGraphNetwork.current, {nodes:this.props.dungGraph.nodes, edges: this.props.dungGraph.arcs}, options);
-        this.network.setOptions({ layout: { randomSeed: 2 } });
+        this.updateNetworkExtension(this.props.dungGraph, this.props.extension);
+        
     }
 
     updateNetwork(newData){
@@ -66,8 +67,13 @@ class VisNetworkDungGraphExtensions extends React.Component{
 	updateNetworkExtension(dGraph, extension){
 		console.log("Updating extension...");
 		this.network.setOptions({layout: {randomSeed:2}});
-		extension.map(node=>{
-			dGraph.nodes[node]['color']='red';	
+        dGraph.nodes.map(node=>{
+            if (extension['extension'].includes(node['id'])){
+                dGraph.nodes[node['id']]['color']='#33FF6B';
+            }else{
+                dGraph.nodes[node['id']]['color']='#ff6666';
+            }
+				
 		});
 		this.network.setData({nodes: dGraph.nodes, edges:dGraph.arcs});
 	}	
@@ -85,7 +91,7 @@ class VisNetworkDungGraphExtensions extends React.Component{
     render(){
         return(
             <div>
-            <label>Dung Graph</label>
+            <label>Extension {this.props.extension['id']}</label>
                 <div ref={this.myDungGraphNetwork} style={{height: "70vh"}}/>
             </div>
         )
