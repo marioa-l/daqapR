@@ -53,29 +53,35 @@ class VisNetworkDungGraphExtensions extends React.Component{
 
     
     componentDidMount(){
+        console.log("Drawing Dung Graph...");
         this.network = new Network(this.myDungGraphNetwork.current, {nodes:this.props.dungGraph.nodes, edges: this.props.dungGraph.arcs}, options);
-        this.updateNetworkExtension(this.props.dungGraph, this.props.extension);
+        this.updateNetworkExtension(this.props.extension);
         
     }
 
     updateNetwork(newData){
-        console.log("Updating Dung network...");
+        console.log("Updating Dung Graph...");
         this.network.setOptions({ layout: { randomSeed: 2 } });
         this.network.setData({nodes: newData.nodes, edges:newData.arcs});
     }
 
-	updateNetworkExtension(dGraph, extension){
-		console.log("Updating extension...");
+	updateNetworkExtension(extension){
+		console.log("Updating Extension Graph...");
 		this.network.setOptions({layout: {randomSeed:2}});
-        dGraph.nodes.map(node=>{
+        nodes = this.props.dungGraph.nodes;
+        nodes.map(node => {
             if (extension['extension'].includes(node['id'])){
-                dGraph.nodes[node['id']]['color']='#33FF6B';
+                this.network.body.data.nodes.update([{
+                    id:node['id'],
+                    color:'#33FF6B'
+                }]);
             }else{
-                dGraph.nodes[node['id']]['color']='#ff6666';
+                this.network.body.data.nodes.update([{
+                    id:node['id'],
+                    color:'#ff6666'
+                }]);
             }
-				
-		});
-		this.network.setData({nodes: dGraph.nodes, edges:dGraph.arcs});
+        })
 	}	
 
     componentDidUpdate(prevProps){
@@ -83,7 +89,7 @@ class VisNetworkDungGraphExtensions extends React.Component{
             this.updateNetwork(this.props.dungGraph);
         }
 	    if(this.props.extension !== prevProps.extension){
-		    this.updateNetworkExtension(this.props.dungGraph, this.props.extension);
+		    this.updateNetworkExtension(this.props.extension);
 	    }    
 	    
     }

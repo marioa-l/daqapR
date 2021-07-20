@@ -26,34 +26,37 @@ class QuerySemantic extends React.Component {
   }
 
   setResponse(response) {
-    this.props.handleExtensionResponse(response);
+    this.props.handleSemanticCompute(response);
   }
 
   handleOnClick() {
     let self = this;
-    //let formData = new FormData();
-    //formData.append('arguments', this.props.args);
-    //formData.append('attacks',this.props.attacks);
-    //formData.append('semantics',this.props.selectedSemantic);
-    //formData.append('solver',this.props.selectedSolver);
-    //formData.append('action','solver'); 	  
-    // Show a loader?
-    //axios.post(URLtoDungSolvers, formData)
-    //.then(function (response) {
-    // console.log("Solver Response: ", response);
-    //self.setResponse(response);
-    //})
-    //.catch(function (error) {
-    //console.log(error);
-    //});
-    self.setResponse({
-      'delp': [],
-      'stable': [],
-      'preferred': [],
-      'semistable': [],
-      'grounded': ['1', '2'],
-      'allSemantics': []
-    });
+    const semantic = this.props.selectedSemantic;
+    const semExtensions = this.props.semantics[semantic];
+    if (semExtensions.length == 0) {
+      let formData = new FormData();
+      for (var i = 0; i < this.props.args.length; i++) {
+        formData.append('arguments[]', this.props.args[i]);
+      }
+      for (var i = 0; i < this.props.attacks.length; i++) {
+        formData.append('attacks[]', this.props.attacks[i]);
+      }
+      formData.append('semantics', this.props.selectedSemantic);
+      formData.append('solver', this.props.selectedSolver);
+      formData.append('action', 'solver');
+      //Show a loader?
+      axios.post(URLtoDungSolvers, formData)
+        .then(function (response) {
+          console.log("Solver Response: ", response['data']);
+          self.setResponse(response['data'][semantic]);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    } else {
+      console.log("Semantics already computed: ", this.props.selectedSemantic);
+    }
+
   }
 
   render() {
@@ -85,20 +88,23 @@ class SelectExtension extends React.Component {
   createSelectItems(){
     let items = [];
     let extensions = this.props.extensions;
-    if (Array.isArray(extensions[0])){
-      for (var key in extensions){
-        items.push(<option key={key} value={extensions[key]}>{String(key + ' -> ' + extensions[key])}</option>); 
+    if (extensions.length !== 0){
+      if (Array.isArray(extensions[0])){
+        for (var key in extensions){
+          items.push(<option key={key} value={extensions[key]}>{String(key + ' -> ' + extensions[key])}</option>); 
+        }
+      }else{
+          items.push(<option key="0" value={extensions}>{String("0" + ' -> ' + extensions)}</option>); 
       }
     }else{
-        items.push(<option key="0" value={extensions}>{String("0" + ' -> ' + extensions)}</option>); 
+      items.push(<option key="0" value={extensions}>{String("0" + ' -> ' + extensions)}</option>);
     }
-    
     return items
   }
 
   render() {
     return (
-      <Form.Control as="select" size="sm" custom value={this.state.selectedExtension}
+      <Form.Control as="select" size="sm" custom value={this.state['selectedExtension']}
         onChange={(e) => this.handleChange(e.target.key, e.target.value)}
         ref={this.refExtension}>
         {this.createSelectItems()}
@@ -126,11 +132,11 @@ class SelectSemantic extends React.Component {
 
   render() {
     return (
-      <Form.Control as="select" size="sm" custom value={this.state.selectedSemantic}
+      <Form.Control as="select" size="sm" custom value={this.state['selectedSemantic']}
         onChange={(e) => this.handleChange(e.target.value)}
         ref={this.refExample}>
         <option key={0} value="0">Select semantic</option>
-        <option key={1} value="delp" selected>DeLP</option>
+        <option key={1} value="delp">DeLP</option>
         <option key={2} value="grounded">Grounded</option>
         <option key={3} value="preferred">Preferred</option>
         <option key={4} value="stable">Stable</option>
@@ -145,7 +151,7 @@ class SelectSolver extends React.Component {
   constructor(props){
     super(props)
     this.state = {
-      selectedSolver: 'jArgSemSat'
+      selectedSolver: 'ArgTech'
     };
     this.handleChangeSolver = this.handleChangeSolver.bind(this);
   };
@@ -166,7 +172,6 @@ class SelectSolver extends React.Component {
           name="group1"
           type="radio"
           id={`jArgSemSat`}
-          defaultChecked
         />
         <Form.Check
           inline
@@ -174,6 +179,7 @@ class SelectSolver extends React.Component {
           name="group1"
           type="radio"
           id={`ArgTech`}
+          defaultChecked
         />
       </div>
     </Form>
@@ -200,25 +206,40 @@ class AppDung extends React.Component {
         'id':0,
         'extension': this.props.dungGraph.delpSemantic
       },
-      'solver': 'jArgSemSat',
+      'solver': 'ArgTech',
     };
     this.handleChangeSemantic = this.handleChangeSemantic.bind(this);
     this.handleChangeSolver = this.handleChangeSolver.bind(this);
     this.handleExtensionResponse = this.handleExtensionResponse.bind(this);
+    this.handleSemanticCompute = this.handleSemanticCompute.bind(this);
   };
 
   handleChangeSemantic(newSemantic) {
     this.setState({ 'selectedSemantic': newSemantic });
-    console.log("Change selected semantic to -> ", newSemantic);
+    const extensions = this.state['semantics'][newSemantic];
+    console.log(extensions);
+    if (extensions.length !== 0){
+      if (Array.isArray(extensions[0])){
+        this.setState( {'extension':{'id': 0, 'extension':extensions[0]}} );
+      }else{
+        this.setState( {'extension':{'id': 0, 'extension':extensions}} );
+      }
+    }
   };
 
   handleChangeSolver(newSolver){
     this.setState({ 'solver': newSolver });
-    console.log("Change solver to -> ", newSolver);
   }
 
   handleExtensionResponse(extension) {
     this.setState({ 'extension': {'id': extension['id'],'extension':extension['extension']}} );
+  }
+
+  handleSemanticCompute(semanticExtensions){
+    const selectedSemantic = this.state['selectedSemantic'];
+    var semantics = { ...this.state['semantics']};
+    semantics[selectedSemantic] = semanticExtensions;
+    this.setState({ semantics });
   }
 
   render() {
@@ -237,7 +258,8 @@ class AppDung extends React.Component {
                           selectedSolver={this.state['solver']}
                           args={this.state['solverData']['args']}
                           attacks={this.state['solverData']['attacks']}
-                          handleExtensionResponse={this.handleExtensionResponse}/>
+                          semantics = {this.state['semantics']}
+                          handleSemanticCompute={this.handleSemanticCompute}/>
           </Col>
           <Col lg='4' style={{containersStyleTEST}}>
             <label>Select Extension:</label>
