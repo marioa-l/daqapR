@@ -42,63 +42,81 @@ var options = {
 };
 
 // initialize your network!
+function TitleExtension(props){
+    const semantic = props['extensionData']['semantic'];
+    const extensionIndex = props['extensionData']['id'];
+    if (extensionIndex === -1){
+        return <label>{semantic.charAt(0).toUpperCase() + semantic.slice(1)} Extensions not comp.</label>
+    }else{
+        return <label>{semantic.charAt(0).toUpperCase() + semantic.slice(1)} Extension {extensionIndex}</label>
+    }
+}
 
-class VisNetworkDungGraphExtensions extends React.Component{
-    constructor(props){
+class VisNetworkDungGraphExtensions extends React.Component {
+    constructor(props) {
         super(props);
         this.myDungGraphNetwork = React.createRef();
         this.updateNetwork = this.updateNetwork.bind(this);
         this.network = {};
     }
 
-    
-    componentDidMount(){
+
+    componentDidMount() {
         console.log("Drawing Dung Graph...");
-        this.network = new Network(this.myDungGraphNetwork.current, {nodes:this.props.dungGraph.nodes, edges: this.props.dungGraph.arcs}, options);
+        this.network = new Network(this.myDungGraphNetwork.current, { nodes: this.props.dungGraph.nodes, edges: this.props.dungGraph.arcs }, options);
         this.updateNetworkExtension(this.props.extension);
-        
+
     }
 
-    updateNetwork(newData){
+    updateNetwork(newData) {
         console.log("Updating Dung Graph...");
         this.network.setOptions({ layout: { randomSeed: 2 } });
-        this.network.setData({nodes: newData.nodes, edges:newData.arcs});
+        this.network.setData({ nodes: newData.nodes, edges: newData.arcs });
     }
 
-	updateNetworkExtension(extension){
-		console.log("Updating Extension Graph...");
-		this.network.setOptions({layout: {randomSeed:2}});
+    updateNetworkExtension(extension) {
+        console.log("Updating Extension Graph...");
+        this.network.setOptions({ layout: { randomSeed: 2 } });
         nodes = this.props.dungGraph.nodes;
-        nodes.map(node => {
-            if (extension['extension'].includes(node['id'])){
+        if (extension['id'] === -1) {
+            nodes.map(node => {
                 this.network.body.data.nodes.update([{
-                    id:node['id'],
-                    color:'#33FF6B'
+                    id: node['id'],
+                    color: '#97C2FC'
                 }]);
-            }else{
-                this.network.body.data.nodes.update([{
-                    id:node['id'],
-                    color:'#ff6666'
-                }]);
-            }
-        })
-	}	
+            })
+        } else {
+            nodes.map(node => {
+                if (extension['extension'].includes(node['id'])) {
+                    this.network.body.data.nodes.update([{
+                        id: node['id'],
+                        color: '#33FF6B'
+                    }]);
+                } else {
+                    this.network.body.data.nodes.update([{
+                        id: node['id'],
+                        color: '#ff6666'
+                    }]);
+                }
+            })
+        }
+    }
 
-    componentDidUpdate(prevProps){
-        if(this.props.dungGraph !== prevProps.dungGraph){
+    componentDidUpdate(prevProps) {
+        if (this.props.dungGraph !== prevProps.dungGraph) {
             this.updateNetwork(this.props.dungGraph);
         }
-	    if(this.props.extension !== prevProps.extension){
-		    this.updateNetworkExtension(this.props.extension);
-	    }    
-	    
+        if (this.props.extension !== prevProps.extension) {
+            this.updateNetworkExtension(this.props.extension);
+        }
+
     }
 
-    render(){
-        return(
+    render() {
+        return (
             <div>
-            <label>Extension {this.props.extension['id']}</label>
-                <div ref={this.myDungGraphNetwork} style={{height: "70vh"}}/>
+                <TitleExtension extensionData={this.props.extension}/>
+                <div ref={this.myDungGraphNetwork} style={{ height: "70vh" }} />
             </div>
         )
     }

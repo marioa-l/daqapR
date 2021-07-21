@@ -54,7 +54,12 @@ class VisNetworkDeLPGraph extends React.Component{
         this.notifyArgumentSelected = this.notifyArgumentSelected.bind(this);
         this.defineView = this.defineView.bind(this);
         this.network = {};
+        this.handleModalChange = this.handleModalChange.bind(this);
     }
+
+    handleModalChange(value){
+        this.props.handleModalChange(value);
+      }
 
     defineView(viewsSetting){
         let adaptedDefeatsObject = JSON.parse(JSON.stringify(this.props.delpGraph.defeatsObject));
@@ -120,6 +125,10 @@ class VisNetworkDeLPGraph extends React.Component{
                 self.selectedArgument = selectedArgument;
                 self.notifyArgumentSelected();
             }
+        });
+        this.network.on("stabilizationIterationsDone", function (params) {
+            console.log("Finished draw");
+            self.handleModalChange(false);
         });
     }
 
