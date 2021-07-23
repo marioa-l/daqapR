@@ -112,7 +112,7 @@ function load_arguments(args) {
 // This function take the DeLP Core response and generate
 // the structures to draw the DeLP Graph
 export function generate_graph_structures(jsonCoreResponseDGraph) {
-    console.log("Parsing DeLP Core response (DGraph)...")
+    //console.log("Parsing DeLP Core response (DGraph)...")
     argumentsObject = [];
     argumentsObjectDung = [];
     subargumentsObject = [];
@@ -302,10 +302,9 @@ function get_dialectical_tree(root) {
 // This function take the DeLP Core response and generate
 // the structures to draw the tree graphs
 export function generate_tree_graph_structures(jsonCoreResponseStatus) {
-    console.log("Parsing DeLP Core response (Trees)...");
+    //console.log("Parsing DeLP Core response (Trees)...");
     treesGlobal = {};
     trees = {};
-
     // Build global trees structure
     build_trees_global(jsonCoreResponseStatus);
 
@@ -319,7 +318,6 @@ export function generate_tree_graph_structures(jsonCoreResponseStatus) {
         argument.color = trees[argument.id].nodes[0].color;
         labeledArguments.push(argument)
     });
-
     return [trees, labeledArguments, delpSemantic];
 }
 

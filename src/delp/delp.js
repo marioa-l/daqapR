@@ -11,8 +11,10 @@ import Button from 'react-bootstrap/Button'
 import Modal from 'react-bootstrap/Modal'
 import VisNetworkDeLPGraph from './visLibDeLPGraph'
 import VisLibTrees from "./visLibTrees";
+import Spinner from 'react-bootstrap/Spinner'
 
-const URLtoCore = 'http://localhost/daqapClient/bridge/bridge.php';
+//const URLtoCore = 'http://localhost/daqapClient/bridge/bridge.php';
+const URLtoCore = 'https://hosting.cs.uns.edu.ar/~daqap/bridge/bridge.php';
 
 const axios = require('axios');
 
@@ -35,74 +37,51 @@ class ModalDeLP extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      visible: false
+      modalInfo:{
+        visible: false,
+        msg: ''
+      }
     };
   }
 
   componentDidUpdate(prevProps){
-    console.log(this.props);
-    if (prevProps.visible !== this.props.visible){
-      this.setState({visible: this.props.visible});
+    const visible = this.props.modalInfo.visible;
+    const msg = this.props.modalInfo.msg;
+    if (visible !== prevProps.modalInfo.visible){
+      this.setState({modalInfo: {visible: visible, msg: msg}})
     }
   }
 
   render(){
     return (
       <>
-        <Modal
-          show={this.state.visible}
-          backdrop="static"
-          keyboard={false}
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Modal title</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            I will not close if you click outside me. Don't even try to press
-            escape key.
-          </Modal.Body>
-          <Modal.Footer>
-            
-          </Modal.Footer>
-        </Modal>
+      <Modal
+      show={this.state.modalInfo['visible']}
+      size="sm"
+      centered
+    >
+      <Modal.Header>
+      </Modal.Header>
+      <Modal.Body>
+        <p className="text-center">
+        {this.state.modalInfo['msg']}
+        <Spinner animation="grow" size='sm' variant="primary"/>
+        </p>
+      </Modal.Body>
+      <Modal.Footer>
+      </Modal.Footer>
+    </Modal>
       </>
     );
   }
 }
 
-/* function Example(props) {
-  const [show, setShow] = useState(false);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
-  return (
-    <>
-      <Modal
-        show={show}
-        backdrop="static"
-        keyboard={false}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title>Modal title</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          I will not close if you click outside me. Don't even try to press
-          escape key.
-        </Modal.Body>
-        <Modal.Footer>
-          
-        </Modal.Footer>
-      </Modal>
-    </>
-  );
-} */
 
 class ExamplePrograms extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedProgram: "0"
+      selectedProgram: "2"
     };
     this.handleChange = this.handleChange.bind(this)
     this.refExample = React.createRef();
@@ -110,9 +89,9 @@ class ExamplePrograms extends React.Component {
 
   componentDidMount() {
     this.setState({
-      selectedProgram: examplePrograms["0"]
+      selectedProgram: examplePrograms["2"]
     });
-    this.props.handleTextChange(examplePrograms["0"]);
+    this.props.handleTextChange(examplePrograms["2"]);
   }
 
   handleChange(event, program) {
@@ -168,28 +147,46 @@ class AnalyzeProgramButton extends React.Component {
     this.props.handleResponse(response);
   }
 
-  handleModalChange(value){
-    this.props.handleModalChange(value);
+  handleModalChange(value, msg){
+    this.props.handleModalChange(value, msg);
   }
 
   componentDidMount() {
     this.AnalyzeButtonRef.current.click();
   }
 
+  parseProgram(program){
+    let newProgram = ''
+    const rules = program.split(/\r?\n/);
+    rules.map((rule)=>{
+      if(!(rule.includes('<-') || rule.includes('-<'))){
+        if(!rule.includes('use_criterion') && rule !== ''){
+          newProgram = newProgram + rule.replace('.','<- true.') + '\n';
+        }else{
+          newProgram = newProgram + rule + '\n';
+        }
+      }
+      else{
+        newProgram = newProgram + rule + '\n';
+      }
+    });
+    return newProgram;
+  }
+
   handleOnClick() {
     let self = this;
-    this.handleModalChange(true);
+    this.handleModalChange(true, 'Analyzaing program...');
     let delpProgram = this.props.program;
+    let parserProgram = self.parseProgram(delpProgram);
     let formData = new FormData();
-    formData.append('delp', delpProgram);
+    formData.append('delp', parserProgram);
     formData.append('version', '2018');
     formData.append('action', 'makeDelp');
     // Show a loader?
     axios.post(URLtoCore, formData)
       .then(function (response) {
-        console.log("Core Response: ", response.data);
+        //console.log("Core Response: ", response.data);
         self.setResponse(response.data);
-        self.setState({visible: false});
       })
       .catch(function (error) {
         console.log(error);
@@ -223,8 +220,8 @@ class ProgramMenu extends React.Component {
           <Col md="6"><Button style={{ backgroundColor: '#337ab7', border: '0px' }} size="sm" block>Load</Button></Col>
         </Row>
         <Row style={{ marginTop: "3px" }}>
-          <Col md="6"><Generators showGeneratedProgram={this.handleChange} /></Col>
-          <Col md="6"><SelectPreferenceCriterion /></Col>
+          <Col md="12"><Generators showGeneratedProgram={this.handleChange} /></Col>
+          {/* <Col md="6"><SelectPreferenceCriterion /></Col> */}
         </Row>
       </div>
     )
@@ -255,13 +252,16 @@ class AppDeLP extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      delpProgram: examplePrograms["0"],
+      delpProgram: examplePrograms["2"],
       coreResponse: '',
       dGraph: '',
       trees: '',
       selectedArgument: '',
       delpSemantic: '',
-      modalVisible: false
+      modalInfo:{
+        visible: false,
+        msg: ''
+      }
     };
     this.handleProgramChange = this.handleProgramChange.bind(this);
     this.handleResponse = this.handleResponse.bind(this);
@@ -269,8 +269,15 @@ class AppDeLP extends React.Component {
     this.handleModalChange = this.handleModalChange.bind(this);
   }
 
-  handleModalChange(value){
-    this.setState({modalVisible: value});
+  componentDidMount(){
+    console.log("DidMount");
+  }
+
+  handleModalChange(value, msg){
+    this.setState({modalInfo:{
+      visible: value,
+      msg: msg
+    }});
   }
 
   handleProgramChange(value) {
@@ -278,8 +285,15 @@ class AppDeLP extends React.Component {
   }
 
   handleResponse(coreResponse) {
-    let structures = generate_graph_structures(coreResponse.dGraph);
-    let trees = generate_tree_graph_structures(coreResponse.status);
+    let structures;
+    let trees;
+    try{
+      structures = generate_graph_structures(coreResponse.dGraph);
+      trees = generate_tree_graph_structures(coreResponse.status);
+    } catch(error){
+      this.handleModalChange(true, 'Program error... Abort.');
+      throw new Error("Something went badly wrong!");
+    }
     this.setState({
       coreResponse: coreResponse,
       dGraph: {
@@ -322,7 +336,7 @@ class AppDeLP extends React.Component {
             <AnalyzeProgramButton program={this.state.delpProgram}
               handleResponse={this.handleResponse} 
               handleModalChange={this.handleModalChange}/>
-            <ModalDeLP visible={this.state.modalVisible}/>  
+            <ModalDeLP modalInfo={this.state.modalInfo}/>  
           </Col>
           <Col lg="5" style={containersStyleTEST}>
             <VisNetworkDeLPGraph delpGraph={this.state.dGraph}

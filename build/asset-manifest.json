@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/~daqap/static/css/main.5ecd60fb.chunk.css",
+    "main.js": "/~daqap/static/js/main.c923d15c.chunk.js",
+    "main.js.map": "/~daqap/static/js/main.c923d15c.chunk.js.map",
+    "runtime-main.js": "/~daqap/static/js/runtime-main.cf7ae583.js",
+    "runtime-main.js.map": "/~daqap/static/js/runtime-main.cf7ae583.js.map",
+    "static/css/2.7d235c77.chunk.css": "/~daqap/static/css/2.7d235c77.chunk.css",
+    "static/js/2.0e56e04d.chunk.js": "/~daqap/static/js/2.0e56e04d.chunk.js",
+    "static/js/2.0e56e04d.chunk.js.map": "/~daqap/static/js/2.0e56e04d.chunk.js.map",
+    "index.html": "/~daqap/index.html",
+    "precache-manifest.3102edf0a2cd075d4c06b8d518f26206.js": "/~daqap/precache-manifest.3102edf0a2cd075d4c06b8d518f26206.js",
+    "service-worker.js": "/~daqap/service-worker.js",
+    "static/css/2.7d235c77.chunk.css.map": "/~daqap/static/css/2.7d235c77.chunk.css.map",
+    "static/css/main.5ecd60fb.chunk.css.map": "/~daqap/static/css/main.5ecd60fb.chunk.css.map",
+    "static/js/2.0e56e04d.chunk.js.LICENSE.txt": "/~daqap/static/js/2.0e56e04d.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.cf7ae583.js",
+    "static/css/2.7d235c77.chunk.css",
+    "static/js/2.0e56e04d.chunk.js",
+    "static/css/main.5ecd60fb.chunk.css",
+    "static/js/main.c923d15c.chunk.js"
+  ]
+}

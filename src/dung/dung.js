@@ -7,13 +7,61 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import VisNetworkDungGraph from './visLibDungGraph'
 import VisNetworkDungGraphExtensions from './visLibDungGraphExtensions'
+import Modal from 'react-bootstrap/Modal'
+import Spinner from 'react-bootstrap/Spinner'
 //import {BrowserRouter, Link, NavLink, Redirect, Route, Switch} from 'react-router-dom'
-const URLtoDungSolvers = 'http://localhost/daqapClient/bridge/callSolver.php';
+
+//const URLtoDungSolvers = 'http://localhost/daqapClient/bridge/callSolver.php';
+const URLtoDungSolvers = 'https://hosting.cs.uns.edu.ar/~daqap/bridge/callSolver.php';
+
 const axios = require('axios');
 
 const containersStyleTEST = {
   marginTop: "10px",
   width: "100%"
+}
+
+class ModalDung extends React.Component{
+  constructor(props){
+    super(props);
+    this.state = {
+      modalInfo:{
+        visible: false,
+        msg:''
+      }
+    };
+  }
+
+  componentDidUpdate(prevProps){
+    const visible = this.props.modalInfo.visible;
+    const msg = this.props.modalInfo.msg;
+    if (visible !== prevProps.modalInfo.visible){
+      this.setState({modalInfo: {visible: visible, msg: msg}})
+    }
+  }
+
+  render(){
+    return (
+      <>
+      <Modal
+      show={this.state.modalInfo['visible']}
+      size="sm"
+      centered
+    >
+      <Modal.Header>
+      </Modal.Header>
+      <Modal.Body>
+        <p className="text-center">
+        {this.state.modalInfo['msg']}
+        <Spinner animation="grow" size='sm' variant="primary"/>
+        </p>
+      </Modal.Body>
+      <Modal.Footer>
+      </Modal.Footer>
+    </Modal>
+      </>
+    );
+  }
 }
 
 class QuerySemantic extends React.Component {
@@ -23,6 +71,11 @@ class QuerySemantic extends React.Component {
     this.handleOnClick = this.handleOnClick.bind(this);
     this.setResponse = this.setResponse.bind(this);
     this.AnalyzeButtonRef = React.createRef();
+    this.handleModalChange = this.handleModalChange.bind(this);
+  }
+
+  handleModalChange(value, msg){
+    this.props.handleModalChange(value, msg);
   }
 
   setResponse(response) {
@@ -34,6 +87,7 @@ class QuerySemantic extends React.Component {
     const semantic = this.props.selectedSemantic;
     const semExtensions = this.props.semantics[semantic];
     if (semExtensions.length == 0) {
+      self.handleModalChange(true, 'Consulting semantics to ' + this.props.selectedSolver);
       let formData = new FormData();
       for (var i = 0; i < this.props.args.length; i++) {
         formData.append('arguments[]', this.props.args[i]);
@@ -212,7 +266,7 @@ class AppDung extends React.Component {
       'selectedSemantic': 'delp',
       'semantics': {
         'delp': [this.props.dungGraph.delpSemantic],
-        'grounded': [[2, 3, 4]],
+        'grounded': [],
         'preferred': [],
         'stable': [],
         'semistable': [],
@@ -224,12 +278,24 @@ class AppDung extends React.Component {
         'extension': this.props.dungGraph.delpSemantic
       },
       'solver': 'ArgTech',
+      'modalInfo': {
+        visible: false,
+        msg: ''
+      }
     };
     this.handleChangeSemantic = this.handleChangeSemantic.bind(this);
     this.handleChangeSolver = this.handleChangeSolver.bind(this);
     this.handleChangeExtension = this.handleChangeExtension.bind(this);
     this.handleSemanticCompute = this.handleSemanticCompute.bind(this);
+    this.handleModalChange = this.handleModalChange.bind(this);
   };
+
+  handleModalChange(value,msg){
+    this.setState({modalInfo: {
+      visible: value,
+      msg: msg
+    }});
+  }
 
   handleChangeSemantic(newSemantic) {
     this.setState({ 'selectedSemantic': newSemantic });
@@ -269,7 +335,9 @@ class AppDung extends React.Component {
               args={this.state['solverData']['args']}
               attacks={this.state['solverData']['attacks']}
               semantics={this.state['semantics']}
-              handleSemanticCompute={this.handleSemanticCompute} />
+              handleSemanticCompute={this.handleSemanticCompute} 
+              handleModalChange = {this.handleModalChange}/>
+              <ModalDung modalInfo={this.state.modalInfo}/>
           </Col>
           <Col lg='4' style={{ containersStyleTEST }}>
             <label>Select Extension:</label>
@@ -283,7 +351,7 @@ class AppDung extends React.Component {
           </Col>
           <Col lg="6" style={containersStyleTEST}>
             <VisNetworkDungGraphExtensions dungGraph={this.state['dungGraph']}
-              extension={this.state['extension']} />
+              extension={this.state['extension']} handleModalChange={this.handleModalChange}/>
           </Col>
         </Row>
       </Container>

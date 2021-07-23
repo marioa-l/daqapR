@@ -57,8 +57,8 @@ class VisNetworkDeLPGraph extends React.Component{
         this.handleModalChange = this.handleModalChange.bind(this);
     }
 
-    handleModalChange(value){
-        this.props.handleModalChange(value);
+    handleModalChange(value, msg){
+        this.props.handleModalChange(value, msg);
       }
 
     defineView(viewsSetting){
@@ -127,8 +127,7 @@ class VisNetworkDeLPGraph extends React.Component{
             }
         });
         this.network.on("stabilizationIterationsDone", function (params) {
-            console.log("Finished draw");
-            self.handleModalChange(false);
+            self.handleModalChange(false, '');
         });
     }
 
@@ -139,7 +138,7 @@ class VisNetworkDeLPGraph extends React.Component{
     }
 
     updateNetwork(newData){
-        console.log("Updating network...");
+        //console.log("Updating network...");
         this.network.setOptions({ layout: { randomSeed: 2 } });
         this.network.setData({nodes: newData.argumentsObject, edges:newData.defeatsObject.concat(newData.subArgumentsObject)});
 

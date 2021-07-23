@@ -7,12 +7,13 @@ require("vis-network/dist/dist/vis-network.min.css");
 var nodes = new DataSet();
 
 // create an array with edges
-var edges = new DataSet();
+//var edges = new DataSet();
 
-var data = {
+/* var data = {
     nodes: nodes,
     edges: edges
-};
+}; */
+
 // Options for DGgraph Network
 var options = {
     nodes: {
@@ -58,35 +59,62 @@ class VisNetworkDungGraphExtensions extends React.Component {
         this.myDungGraphNetwork = React.createRef();
         this.updateNetwork = this.updateNetwork.bind(this);
         this.network = {};
+        this.handleModalChange = this.handleModalChange.bind(this);
     }
 
+    handleModalChange(value, msg){
+        this.props.handleModalChange(value, msg);
+    }
+
+    dungGraphNetworkEvents(){
+        //let self = this;
+        //Here define the associadted events with the network
+        this.network.on("click", function (params) {
+            let selectedArgument = params.nodes[0];
+            if(selectedArgument){
+                // To notify when an argument is selected on network
+                //self.selectedArgument = selectedArgument;
+                //self.notifyArgumentSelected();
+            }
+        });
+        this.network.on("stabilizationIterationsDone", function (params) {
+            //console.log("Finish Dung draw");
+        });
+    }
 
     componentDidMount() {
-        console.log("Drawing Dung Graph...");
+        //console.log("Drawing Dung Graph...");
         this.network = new Network(this.myDungGraphNetwork.current, { nodes: this.props.dungGraph.nodes, edges: this.props.dungGraph.arcs }, options);
         this.updateNetworkExtension(this.props.extension);
+        this.dungGraphNetworkEvents();
 
     }
 
     updateNetwork(newData) {
-        console.log("Updating Dung Graph...");
+        //console.log("Updating Dung Graph...");
         this.network.setOptions({ layout: { randomSeed: 2 } });
         this.network.setData({ nodes: newData.nodes, edges: newData.arcs });
     }
 
     updateNetworkExtension(extension) {
-        console.log("Updating Extension Graph...");
+        //console.log("Updating Extension Graph...");
         this.network.setOptions({ layout: { randomSeed: 2 } });
         nodes = this.props.dungGraph.nodes;
         if (extension['id'] === -1) {
-            nodes.map(node => {
+            for (const node of nodes){
                 this.network.body.data.nodes.update([{
                     id: node['id'],
                     color: '#97C2FC'
                 }]);
-            })
+            }
+            /* nodes.map(node => {
+                this.network.body.data.nodes.update([{
+                    id: node['id'],
+                    color: '#97C2FC'
+                }]);
+            }) */
         } else {
-            nodes.map(node => {
+            for (const node of nodes){
                 if (extension['extension'].includes(node['id'])) {
                     this.network.body.data.nodes.update([{
                         id: node['id'],
@@ -98,8 +126,22 @@ class VisNetworkDungGraphExtensions extends React.Component {
                         color: '#ff6666'
                     }]);
                 }
-            })
+            }
+            /* nodes.map(node => {
+                if (extension['extension'].includes(node['id'])) {
+                    this.network.body.data.nodes.update([{
+                        id: node['id'],
+                        color: '#33FF6B'
+                    }]);
+                } else {
+                    this.network.body.data.nodes.update([{
+                        id: node['id'],
+                        color: '#ff6666'
+                    }]);
+                }
+            }) */
         }
+        this.handleModalChange(false, '');
     }
 
     componentDidUpdate(prevProps) {
