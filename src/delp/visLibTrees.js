@@ -33,39 +33,38 @@ var options = {
 
 
 
-class VisLibTrees extends React.Component{
-    constructor(props){
+class VisLibTrees extends React.Component {
+    constructor(props) {
         super(props);
         this.network = {};
         this.myTreeNetwork = React.createRef();
         this.updateTree = this.updateTree.bind(this);
     }
 
-    componentDidMount(){
-
+    componentDidMount() {
         this.network = new Network(this.myTreeNetwork.current, data, options);
     }
 
-    updateTree(tree){
-        nodes =  tree.nodes;
-        edges =  tree.edges;
+    updateTree(tree) {
+        nodes = tree.nodes;
+        edges = tree.edges;
 
-        this.network.setData({nodes: nodes, edges:edges});
+        this.network.setData({ nodes: nodes, edges: edges });
 
     }
 
-    componentDidUpdate(prevProps){
-        if(this.props.selectedArgument !== prevProps.selectedArgument){
+    componentDidUpdate(prevProps) {
+        if (this.props.selectedArgument !== prevProps.selectedArgument) {
             this.updateTree(this.props.selectedArgument);
         }
 
     }
 
-    render(){
-        return(
+    render() {
+        return (
             <div>
                 <label>Dialectical Tree</label>
-                <div ref={this.myTreeNetwork} style={{height: "84vh"}}/>
+                <div ref={this.myTreeNetwork} style={{ height: "84vh" }} />
             </div>
         )
     }

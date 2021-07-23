@@ -100,7 +100,7 @@ class Generator2Form extends React.Component{
         self.handleGeneratedProgram("Timeout to generate program");
       }else{
         //console.log(response.data);
-        let program = response.data.replace(/[\[\]']/g,'').replace(/(\., )/g,".\n");
+        let program = response.data.replace(/\[\]']/g,'').replace(/(\., )/g,".\n");
         self.handleGeneratedProgram(program);
       }
     })

@@ -2,8 +2,13 @@ import * as utils from "./utilsDeLP";
 
 // Global structures
 let argumentsObject = [];
+let argumentsObjectDung = [];
 let subargumentsObject = [];
 let defeatsObject = [];
+let defeatsObjectDung = [];
+let argumentsDung = {}; //argument:id
+let attacksDung = []; //Tuples of (from, to)
+let delpSemantic = []; //Ids of warrant arguments
 let argIndex = 0;
 
 // Build the Defeats object for the DeLP Graph
@@ -40,6 +45,9 @@ function load_defeaters(defeater, defeated) {
             align: 'top'
         }
     });
+
+
+
 }
 
 // Build the SubArguments object for the DeLP Graph
@@ -81,30 +89,56 @@ function load_arguments(args) {
             'shape': 'triangle',
             'size': '40'
         });
+        argumentsObjectDung.push({
+            'id': argIndex,
+            'label': argument[id].conclusion + '\n\n' + argIndex,
+            'font': {
+                color: 'black',
+                size: 28,
+                vadjust: -130,
+                align: 'center'
+            },
+            'title': utils.getFormatedArgumentBody(argument[id].id),
+            'shape': 'dot',
+            'size': '40'
+        });
+        argumentsDung[utils.getFormatedArgumentBody(id)] = argIndex;
         argument[id].defeats.map(defeater => load_defeaters(defeater, argument[id]));
         argument[id].subarguments.map(subargument => load_subarguments(subargument, argument[id]));
         argIndex = argIndex + 1;
-    })
+    });
 }
 
 // This function take the DeLP Core response and generate
 // the structures to draw the DeLP Graph
 export function generate_graph_structures(jsonCoreResponseDGraph) {
-    console.log("Parsing DeLP Core response (DGraph)...")
+    //console.log("Parsing DeLP Core response (DGraph)...")
     argumentsObject = [];
+    argumentsObjectDung = [];
     subargumentsObject = [];
     defeatsObject = [];
+    defeatsObjectDung = [];
+    argumentsDung = {};
+    attacksDung = [];
+    delpSemantic = [];
     argIndex = 0;
 
     jsonCoreResponseDGraph.map(literal => {
         let key = Object.keys(literal)[0];
         load_arguments(literal[key]);
     });
-
+    defeatsObject.map(attack => {
+        attacksDung.push('(' + argumentsDung[attack['from']] + ',' + argumentsDung[attack['to']] + ')');
+        defeatsObjectDung.push({ 'from': argumentsDung[attack['from']], 'to': argumentsDung[attack['to']], 'arrows': 'to', 'width': 3 })
+    });
     return {
         'argumentsObject': argumentsObject,
+        'argumentsObjectDung': argumentsObjectDung,
         'subArgumentsObject': subargumentsObject,
-        'defeatsObject': defeatsObject
+        'defeatsObject': defeatsObject,
+        'defeatsObjectDung': defeatsObjectDung,
+        'argumentsDung': Object.values(argumentsDung),
+        'attacksDung': attacksDung
     };
 }
 
@@ -117,13 +151,13 @@ let trees = {}
 let treesGlobal = {}
 
 // To get the type of a defeat relation
-function get_type_defeat(argument, defeater){
+function get_type_defeat(argument, defeater) {
     let typeDefeat = defeatsObject.find(defeat => defeat.from === utils.getFormatedArgumentBody(defeater) && defeat.to === utils.getFormatedArgumentBody(argument));
     return typeDefeat.dashes;
 }
 
 // Returns all children of a parent in the tree structure
-function get_childs(parent, list){
+function get_childs(parent, list) {
     let childs = [];
     for (var count = 0; count < list.length; count++) {
         if (list[count][2] === parent) {
@@ -186,6 +220,10 @@ function build_trees_global(status) {
         for (const [, [, root]] of Object.entries(Object.entries(roots))) {
             if (root.length !== 0) {
                 estado = get_labeled_tree(root[1], tempLines, obj); // Return the state of the root
+                if (estado.localeCompare("U") == 0){
+                    //Warrant argument
+                    delpSemantic.push(argumentsDung[utils.getFormatedArgumentBody(root[0])]);
+                } 
                 treesGlobal[utils.getFormatedArgumentBody(root[0])] = {
                     'id': root[1],
                     'status': estado,
@@ -205,7 +243,7 @@ function get_dialectical_tree(root) {
     let edges = [];
     let color, typeDefeat, conclusion;
 
-    if(treesGlobal[root].status === "U"){
+    if (treesGlobal[root].status === "U") {
         color = '#33FF6B';
     } else {
         color = '#ff6666';
@@ -219,7 +257,7 @@ function get_dialectical_tree(root) {
         'title': root,
         'shape': 'triangle',
         'size': 40,
-        'font':{
+        'font': {
             vadjust: -130,
             size: 28,
             color: 'black'
@@ -261,13 +299,12 @@ function get_dialectical_tree(root) {
     };
 }
 
-// This function tale the DeLP Core response and generate
+// This function take the DeLP Core response and generate
 // the structures to draw the tree graphs
 export function generate_tree_graph_structures(jsonCoreResponseStatus) {
-    console.log("Parsing DeLP Core response (Trees)...");
+    //console.log("Parsing DeLP Core response (Trees)...");
     treesGlobal = {};
     trees = {};
-
     // Build global trees structure
     build_trees_global(jsonCoreResponseStatus);
 
@@ -281,7 +318,6 @@ export function generate_tree_graph_structures(jsonCoreResponseStatus) {
         argument.color = trees[argument.id].nodes[0].color;
         labeledArguments.push(argument)
     });
-
-    return [trees, labeledArguments];
+    return [trees, labeledArguments, delpSemantic];
 }
 

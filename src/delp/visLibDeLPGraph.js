@@ -1,6 +1,7 @@
 import React from "react";
 import { Network } from "vis-network/peer/esm/vis-network";
 import { DataSet } from "vis-data/peer/esm/vis-data"
+import Views from "./views";
 
 require("vis-network/dist/dist/vis-network.min.css");
 
@@ -51,7 +52,64 @@ class VisNetworkDeLPGraph extends React.Component{
         this.updateNetwork = this.updateNetwork.bind(this);
         this.dGraphNetworkEvents = this.dGraphNetworkEvents.bind(this);
         this.notifyArgumentSelected = this.notifyArgumentSelected.bind(this);
+        this.defineView = this.defineView.bind(this);
         this.network = {};
+        this.handleModalChange = this.handleModalChange.bind(this);
+    }
+
+    handleModalChange(value, msg){
+        this.props.handleModalChange(value, msg);
+      }
+
+    defineView(viewsSetting){
+        let adaptedDefeatsObject = JSON.parse(JSON.stringify(this.props.delpGraph.defeatsObject));
+        let adaptedArgumentsObject = JSON.parse(JSON.stringify(this.props.delpGraph.argumentsObject));
+
+        if ((viewsSetting.optionsAttacksPointsInternal || viewsSetting.optionsAttackPointsConclusion) &&
+            !(viewsSetting.optionsAttacksPointsInternal && viewsSetting.optionsAttackPointsConclusion)) {
+            if (viewsSetting.optionsAttacksPointsInternal) {
+                adaptedDefeatsObject = adaptedDefeatsObject.filter(element => element.label === 'I');
+            } else {
+                adaptedDefeatsObject = adaptedDefeatsObject.filter(element => element.label === "C");
+            }
+        } else {
+            if (!(viewsSetting.optionsAttacksPointsInternal && viewsSetting.optionsAttackPointsConclusion)) {
+
+                adaptedDefeatsObject.forEach(function (element) { delete element.label });
+
+            }
+
+        }
+
+        if (!viewsSetting.optionTypeDefeater) {
+            adaptedDefeatsObject.forEach(function (element) { delete element.dashes });
+            adaptedDefeatsObject.forEach(function (element) {
+                element.color = {
+                    color: '#97C2FC',
+                    highlight: '#97C2FC',
+                    hover: '#97C2FC'
+                };
+            });
+        }
+
+        let subsArg = [];
+        if (viewsSetting.optionSubArgumentRelation) {
+            subsArg = this.props.delpGraph.subArgumentsObject;
+        }
+
+        if(!viewsSetting.optionStatusArguments){
+            adaptedArgumentsObject.forEach(function (element) {
+                delete element.color
+            });
+        }
+
+        let newDefeatsObject = {
+            argumentsObject: adaptedArgumentsObject,
+            defeatsObject: adaptedDefeatsObject,
+            subArgumentsObject: subsArg
+        };
+
+        this.updateNetwork(newDefeatsObject);
     }
 
     notifyArgumentSelected(){
@@ -68,16 +126,22 @@ class VisNetworkDeLPGraph extends React.Component{
                 self.notifyArgumentSelected();
             }
         });
+        this.network.on("stabilizationIterationsDone", function (params) {
+            self.handleModalChange(false, '');
+        });
     }
 
     componentDidMount(){
         this.network = new Network(this.myDeLPGraphNetwork.current, data, options);
+        this.network.setOptions({ layout: { randomSeed: 2 } });
         this.dGraphNetworkEvents();
     }
 
     updateNetwork(newData){
-        console.log("Updating network...");
+        //console.log("Updating network...");
+        this.network.setOptions({ layout: { randomSeed: 2 } });
         this.network.setData({nodes: newData.argumentsObject, edges:newData.defeatsObject.concat(newData.subArgumentsObject)});
+
     }
 
     componentDidUpdate(prevProps){
@@ -90,7 +154,8 @@ class VisNetworkDeLPGraph extends React.Component{
         return(
             <div>
             <label>DeLP Graph</label>
-            <div ref={this.myDeLPGraphNetwork} style={{height: "84vh"}}/>
+                <Views handleViewsChange = {this.defineView}/>
+                <div ref={this.myDeLPGraphNetwork} style={{height: "84vh"}}/>
             </div>
         )
     }

@@ -11,15 +11,15 @@ export const examplePrograms = {
         "~fly(X) -< baby(X).\n" +
         "fly(X) -< chicken(X), scared(X).\n\n" +
 
-        "chicken(little) <- true.\n" +
-        "chicken(koko) <- true.\n" +
-        "scared(koko) <- true.\n" +
-        "chicken(lily) <- true.\n" +
-        "scared(lily) <- true.\n" +
-        "penguin(chilly) <- true.\n" +
-        "duck(tiny) <- true.\n" +
-        "baby(tiny) <- true.\n" +
-        "rhea(charito) <- true.",
+        "chicken(little).\n" +
+        "chicken(koko).\n" +
+        "scared(koko).\n" +
+        "chicken(lily).\n" +
+        "scared(lily).\n" +
+        "penguin(chilly).\n" +
+        "duck(tiny).\n" +
+        "baby(tiny).\n" +
+        "rhea(charito).",
 
     "1": "use_criterion(more_specific).\n\n" +
         "a-<b.\n" +
@@ -28,9 +28,9 @@ export const examplePrograms = {
         "h -< b.\n" +
         "~h -< d,b.\n\n" +
 
-        "b<-true.\n" +
-        "c<-true.\n" +
-        "d<-true.",
+        "b.\n" +
+        "c.\n" +
+        "d.",
 
     "2": "use_criterion(more_specific).\n\n" +
         "surf -< nice, spare_time.\n" +
@@ -48,13 +48,13 @@ export const examplePrograms = {
         "many_surfers -< waves.\n" +
         "~many_surfers -< monday.\n\n" +
 
-        "monday <- true.\n" +
-        "cloudy <- true.\n" +
-        "dry_season <- true.\n" +
-        "waves <- true.\n" +
-        "grass_grown <- true.\n" +
-        "hire_gardener <- true.\n" +
-        "vacation <- true.\n" +
+        "monday.\n" +
+        "cloudy.\n" +
+        "dry_season.\n" +
+        "waves.\n" +
+        "grass_grown.\n" +
+        "hire_gardener.\n" +
+        "vacation.\n" +
         "~working <- vacation.\n" +
         "few_surfers <- ~many_surfers.\n" +
         "~surf <- ill.",
@@ -71,9 +71,9 @@ export const examplePrograms = {
         "a -< t.\n" +
         "~f -< ~e.\n\n" +
 
-        "~a <- true.\n" +
-        "t <- true.\n" +
-        "b <- true.\n" +
+        "~a.\n" +
+        "t.\n" +
+        "b.\n" +
         "d <- t.",
 
     "4": "has_priority((a-<d,b,c),(~a-<b,c)).\n" +
@@ -87,9 +87,9 @@ export const examplePrograms = {
         "h -< b.\n" +
         "~h -< d,b.\n\n" +
 
-        "b<-true.\n" +
-        "c<-true.\n" +
-        "d<-true.",
+        "b.\n" +
+        "c.\n" +
+        "d.",
 
     "5": "use_criterion(more_specific).\n\n" +
         "a -< x.\n" +
@@ -100,10 +100,10 @@ export const examplePrograms = {
         "~a -< w,z.\n" +
         "a -< w.\n\n" +
 
-        "x <- true.\n" +
-        "y <- true.\n" +
-        "z <- true.\n" +
-        "w <- true.",
+        "x.\n" +
+        "y.\n" +
+        "z.\n" +
+        "w.",
 
     "6": "use_criterion(more_specific).\n" +
 
@@ -119,18 +119,18 @@ export const examplePrograms = {
 
         "a-<b,c,d,e.\n\n" +
 
-        "b<-true.\n" +
-        "c<-true.\n" +
-        "d<-true.\n" +
-        "e<-true.\n" +
-        "z<-true.",
+        "b.\n" +
+        "c.\n" +
+        "d.\n" +
+        "e.\n" +
+        "z."
 
-    "7": "use_criterion(more_specific).\n\n" +
+    /* "7": "use_criterion(more_specific).\n\n" +
 
         "~culpable(X) -< not culpable(X).\n" +
         "~preso(X) <- inocente(X).\n" +
         "inocente(X) <- ~culpable(X).\n" +
         "preso(X) -< not culpable(X), alta-sospecha(X).\n" +
-        "alta-sospecha(pepe) <- true."
+        "alta-sospecha(pepe) ." */
 
 }
