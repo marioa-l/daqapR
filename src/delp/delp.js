@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { examplePrograms } from './examplePrograms';
 import { generate_graph_structures, generate_tree_graph_structures } from "./DataParsing";
 import Generators from './generators/generators';
@@ -29,7 +29,7 @@ const textAreaProgramStyle = {
   resize: "none",
   fontFamily: "Consolas",
   fontSize: "14px",
-  height: "65vh",
+  height: "68vh",
   marginTop: "5px"
 }
 
@@ -121,7 +121,7 @@ class ExamplePrograms extends React.Component {
   }
 }
 
-function SelectPreferenceCriterion() {
+/* function SelectPreferenceCriterion() {
   return (
     <Container>
       <Row>
@@ -131,7 +131,7 @@ function SelectPreferenceCriterion() {
       </Row>
     </Container>
   )
-}
+} */
 
 class AnalyzeProgramButton extends React.Component {
 
@@ -158,7 +158,7 @@ class AnalyzeProgramButton extends React.Component {
   parseProgram(program){
     let newProgram = ''
     const rules = program.split(/\r?\n/);
-    rules.map((rule)=>{
+    for (const rule of rules){
       if(!(rule.includes('<-') || rule.includes('-<'))){
         if(!rule.includes('use_criterion') && rule !== ''){
           newProgram = newProgram + rule.replace('.','<- true.') + '\n';
@@ -169,7 +169,7 @@ class AnalyzeProgramButton extends React.Component {
       else{
         newProgram = newProgram + rule + '\n';
       }
-    });
+    }
     return newProgram;
   }
 
@@ -251,6 +251,7 @@ class TextAreaProgram extends React.Component {
 class AppDeLP extends React.Component {
   constructor(props) {
     super(props);
+    console.log("DeLP Component created...");
     this.state = {
       delpProgram: examplePrograms["2"],
       coreResponse: '',
@@ -267,10 +268,6 @@ class AppDeLP extends React.Component {
     this.handleResponse = this.handleResponse.bind(this);
     this.handleSelectedArgument = this.handleSelectedArgument.bind(this);
     this.handleModalChange = this.handleModalChange.bind(this);
-  }
-
-  componentDidMount(){
-    console.log("DidMount");
   }
 
   handleModalChange(value, msg){
@@ -327,7 +324,7 @@ class AppDeLP extends React.Component {
   render() {
     return (
       <Container fluid>
-        <Row>
+        <Row style={{height: "95vh"}}>
           <Col lg="3" style={containersStyleTEST}>
             <label>Program</label>
             <ProgramMenu handleTextChange={this.handleProgramChange} />

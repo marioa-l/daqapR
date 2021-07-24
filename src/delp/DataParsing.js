@@ -220,7 +220,7 @@ function build_trees_global(status) {
         for (const [, [, root]] of Object.entries(Object.entries(roots))) {
             if (root.length !== 0) {
                 estado = get_labeled_tree(root[1], tempLines, obj); // Return the state of the root
-                if (estado.localeCompare("U") == 0){
+                if (estado.localeCompare("U") === 0){
                     //Warrant argument
                     delpSemantic.push(argumentsDung[utils.getFormatedArgumentBody(root[0])]);
                 } 

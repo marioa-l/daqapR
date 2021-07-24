@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
@@ -9,15 +9,14 @@ import VisNetworkDungGraph from './visLibDungGraph'
 import VisNetworkDungGraphExtensions from './visLibDungGraphExtensions'
 import Modal from 'react-bootstrap/Modal'
 import Spinner from 'react-bootstrap/Spinner'
-//import {BrowserRouter, Link, NavLink, Redirect, Route, Switch} from 'react-router-dom'
 
 //const URLtoDungSolvers = 'http://localhost/daqapClient/bridge/callSolver.php';
 const URLtoDungSolvers = 'https://hosting.cs.uns.edu.ar/~daqap/bridge/callSolver.php';
 
 const axios = require('axios');
 
-const containersStyleTEST = {
-  marginTop: "10px",
+const containersStyleTESTDung = {
+  marginTop: "20px",
   width: "100%"
 }
 
@@ -86,14 +85,14 @@ class QuerySemantic extends React.Component {
     let self = this;
     const semantic = this.props.selectedSemantic;
     const semExtensions = this.props.semantics[semantic];
-    if (semExtensions.length == 0) {
+    if (semExtensions.length === 0) {
       self.handleModalChange(true, 'Consulting semantics to ' + this.props.selectedSolver);
       let formData = new FormData();
       for (var i = 0; i < this.props.args.length; i++) {
         formData.append('arguments[]', this.props.args[i]);
       }
-      for (var i = 0; i < this.props.attacks.length; i++) {
-        formData.append('attacks[]', this.props.attacks[i]);
+      for (var j = 0; j < this.props.attacks.length; j++) {
+        formData.append('attacks[]', this.props.attacks[j]);
       }
       formData.append('semantics', this.props.selectedSemantic);
       formData.append('solver', this.props.selectedSolver);
@@ -124,7 +123,7 @@ class QuerySemantic extends React.Component {
 
   render() {
     return (
-      <Button style={{ backgroundColor: '#337ab7', border: '0px' }} size="md" block onClick={this.handleOnClick} ref={this.AnalyzeButtonRef}>
+      <Button style={{ backgroundColor: '#337ab7', border: '0px' , marginTop:'28px'}} size="md" block onClick={this.handleOnClick} ref={this.AnalyzeButtonRef}>
         Query
       </Button>
     )
@@ -142,7 +141,6 @@ class SelectExtension extends React.Component {
   };
 
   handleChange(key, extension) {
-    console.log(key);
     this.setState({
       selectedExtension: key
     });
@@ -259,6 +257,7 @@ class SelectSolver extends React.Component {
 
 class AppDung extends React.Component {
   constructor(props) {
+    console.log("Dung Component created...");
     super(props);
     this.state = {
       'dungGraph': { 'nodes': this.props.dungGraph.argumentsObjectDung, 'arcs': this.props.dungGraph.defeatsObjectDung },
@@ -306,7 +305,6 @@ class AppDung extends React.Component {
   }
 
   handleChangeExtension(extension) {
-    console.log("New Extension to Draw ", extension);
     const selectedSemantic = this.state['selectedSemantic'];
     this.setState({ 'extension': { 'semantic': selectedSemantic, 'id': extension['id'], 'extension': extension['extension'] } });
   }
@@ -318,18 +316,47 @@ class AppDung extends React.Component {
     this.setState({ semantics });
   }
 
+  componentDidUpdate(prevProps) {
+    const newDungGrapg = this.props.dungGraph.argumentsDung;
+    if (prevProps.dungGraph.argumentsDung !== newDungGrapg){
+      this.setState({
+        dungGraph: { 'nodes': this.props.dungGraph.argumentsObjectDung, 'arcs': this.props.dungGraph.defeatsObjectDung },
+        solverData: { 'args': this.props.dungGraph.argumentsDung, 'attacks': this.props.dungGraph.attacksDung },
+        'selectedSemantic': 'delp',
+        'semantics': {
+          'delp': [this.props.dungGraph.delpSemantic],
+          'grounded': [],
+          'preferred': [],
+          'stable': [],
+          'semistable': [],
+          'allSemantics': [],
+        },
+        'extension': {
+          'semantic': 'delp',
+          'id': 0,
+          'extension': this.props.dungGraph.delpSemantic
+        },
+        'solver': 'ArgTech',
+        'modalInfo': {
+          visible: false,
+          msg: ''
+        }
+      })
+    }
+  }
+
   render() {
     return (
-      <Container fluid>
-        <Row>
-          <Col lg='2' style={containersStyleTEST}>
+      <Container fluid style={containersStyleTESTDung}>
+        <Row style={{borderTopStyle:'dotted'}}>
+          <Col lg='2' >
             <label>Select Semantic:</label>
             <SelectSemantic handleChangeSemantic={this.handleChangeSemantic} />
           </Col>
-          <Col lg='3' style={containersStyleTEST}>
+          <Col lg='3'>
             <SelectSolver handleChangeSolver={this.handleChangeSolver} />
           </Col>
-          <Col lg='2' style={{ marginTop: '25px' }}>
+          <Col lg='2'>
             <QuerySemantic selectedSemantic={this.state['selectedSemantic']}
               selectedSolver={this.state['solver']}
               args={this.state['solverData']['args']}
@@ -339,17 +366,17 @@ class AppDung extends React.Component {
               handleModalChange = {this.handleModalChange}/>
               <ModalDung modalInfo={this.state.modalInfo}/>
           </Col>
-          <Col lg='4' style={{ containersStyleTEST }}>
+          <Col lg='4'>
             <label>Select Extension:</label>
             <SelectExtension extensions={this.state['semantics'][this.state['selectedSemantic']]}
               handleChangeExtension={this.handleChangeExtension} />
           </Col>
         </Row>
         <Row>
-          <Col lg="6" style={containersStyleTEST}>
+          <Col lg="6">
             <VisNetworkDungGraph dungGraph={this.state['dungGraph']} />
           </Col>
-          <Col lg="6" style={containersStyleTEST}>
+          <Col lg="6">
             <VisNetworkDungGraphExtensions dungGraph={this.state['dungGraph']}
               extension={this.state['extension']} handleModalChange={this.handleModalChange}/>
           </Col>

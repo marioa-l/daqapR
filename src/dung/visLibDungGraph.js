@@ -1,18 +1,8 @@
 import React from "react";
 import { Network } from "vis-network/peer/esm/vis-network";
-import { DataSet } from "vis-data/peer/esm/vis-data"
 
 require("vis-network/dist/dist/vis-network.min.css");
 
-var nodes = new DataSet();
-
-// create an array with edges
-var edges = new DataSet();
-
-var data = {
-    nodes: nodes,
-    edges: edges
-};
 // Options for DGgraph Network
 var options = {
     nodes: {
@@ -55,12 +45,13 @@ class VisNetworkDungGraph extends React.Component{
     componentDidMount(){
         this.network = new Network(this.myDungGraphNetwork.current, {nodes:this.props.dungGraph.nodes, edges: this.props.dungGraph.arcs}, options);
         this.network.setOptions({ layout: { randomSeed: 2 } });
+        this.network.fit();
     }
 
     updateNetwork(newData){
-        console.log("Updating Dung network...");
         this.network.setOptions({ layout: { randomSeed: 2 } });
         this.network.setData({nodes: newData.nodes, edges:newData.arcs});
+        console.log("Dung Graph updated...");
     }
 
     componentDidUpdate(prevProps){
@@ -71,9 +62,9 @@ class VisNetworkDungGraph extends React.Component{
 
     render(){
         return(
-            <div>
+            <div style={{borderStyle:'dotted'}}>
             <label>Dung Graph</label>
-                <div ref={this.myDungGraphNetwork} style={{height: "70vh"}}/>
+                <div ref={this.myDungGraphNetwork} style={{height: "80vh"}}/>
             </div>
         )
     }

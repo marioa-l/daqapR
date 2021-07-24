@@ -2,10 +2,8 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navbar from 'react-bootstrap/Navbar'
 import Nav from 'react-bootstrap/Nav'
-//import { BrowserRouter, Link, NavLink, Redirect, Route, Switch, Router } from 'react-router-dom'
-import AppDeLP from './delp/delp'
-import AppDung from './dung/dung'
 import HomeComponent from './info/home'
+import DAQAP from './daqap'
 import {
 	BrowserRouter as Router,
 	Switch,
@@ -15,28 +13,6 @@ import {
 } from "react-router-dom";
 
 class App extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			argumentsObjectDung: '',
-			defeatsObjectDung: '',
-			argumentsDung: '',
-			attacksDung: '',
-			delpSemantic: ''
-		};
-		this.handleResponse = this.handleResponse.bind(this);
-	}
-
-	handleResponse(response) {
-		this.setState({
-			argumentsObjectDung: response.argumentsObjectDung,
-			defeatsObjectDung: response.defeatsObjectDung,
-			argumentsDung: response.argumentsDung,
-			attacksDung: response.attacksDung,
-			delpSemantic: response.delpSemantic
-		});
-	}
-
 	render() {
 		return (
 			<Router>
@@ -46,20 +22,16 @@ class App extends React.Component {
 					<Navbar.Collapse id="basic-navbar-nav">
 						<Nav className="mr-auto">
 							<Nav.Link as={NavLink} to="/home" style={{ color: 'white' }}>Home</Nav.Link>
-							<Nav.Link as={NavLink} to="/delp" style={{ color: 'white' }}>DeLP</Nav.Link>
-							<Nav.Link as={NavLink} to="/dung" style={{ color: 'white' }}>Dung</Nav.Link>
+							<Nav.Link as={NavLink} to="/daqap" style={{ color: 'white' }}>Daqap</Nav.Link>
 						</Nav>
 					</Navbar.Collapse>
 				</Navbar>
 				<Switch>
-					<Route path="/home">
+					<Route exact path="/home">
 						<HomeComponent />
 					</Route>
-					<Route path="/delp">
-						<AppDeLP handleGlobalResponseChange={this.handleResponse} />
-					</Route>
-					<Route path="/dung">
-						<AppDung dungGraph={this.state}/>
+					<Route exact path="/daqap">
+						<DAQAP />
 					</Route>
 				</Switch>
 			</Router>

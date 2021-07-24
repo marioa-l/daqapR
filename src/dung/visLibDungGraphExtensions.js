@@ -1,18 +1,7 @@
 import React from "react";
 import { Network } from "vis-network/peer/esm/vis-network";
-import { DataSet } from "vis-data/peer/esm/vis-data"
 
 require("vis-network/dist/dist/vis-network.min.css");
-
-var nodes = new DataSet();
-
-// create an array with edges
-//var edges = new DataSet();
-
-/* var data = {
-    nodes: nodes,
-    edges: edges
-}; */
 
 // Options for DGgraph Network
 var options = {
@@ -97,9 +86,8 @@ class VisNetworkDungGraphExtensions extends React.Component {
     }
 
     updateNetworkExtension(extension) {
-        //console.log("Updating Extension Graph...");
         this.network.setOptions({ layout: { randomSeed: 2 } });
-        nodes = this.props.dungGraph.nodes;
+        let nodes = this.props.dungGraph.nodes;
         if (extension['id'] === -1) {
             for (const node of nodes){
                 this.network.body.data.nodes.update([{
@@ -151,14 +139,14 @@ class VisNetworkDungGraphExtensions extends React.Component {
         if (this.props.extension !== prevProps.extension) {
             this.updateNetworkExtension(this.props.extension);
         }
-
+        this.network.redraw();
     }
 
     render() {
         return (
-            <div>
+            <div style={{borderStyle:'dotted'}}>
                 <TitleExtension extensionData={this.props.extension}/>
-                <div ref={this.myDungGraphNetwork} style={{ height: "70vh" }} />
+                <div ref={this.myDungGraphNetwork} style={{ height: "80vh" }} />
             </div>
         )
     }
