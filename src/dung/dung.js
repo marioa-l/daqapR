@@ -16,7 +16,7 @@ const URLtoDungSolvers = 'https://hosting.cs.uns.edu.ar/~daqap/bridge/callSolver
 const axios = require('axios');
 
 const containersStyleTESTDung = {
-  marginTop: "20px",
+  marginTop: "5px",
   width: "100%"
 }
 
@@ -133,25 +133,22 @@ class QuerySemantic extends React.Component {
 class SelectExtension extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      selectedExtension: 0
-    };
     this.handleChange = this.handleChange.bind(this)
     this.refExtension = React.createRef();
   };
 
-  handleChange(key, extension) {
-    this.setState({
-      selectedExtension: key
-    });
-    this.props.handleChangeExtension({ 'id': key, 'extension': extension });
+  handleChange(extension) {
+    console.log(extension);
+    this.props.handleChangeExtension(extension);
   };
 
   componentDidUpdate(prevProps) {
     const newExtensions = this.props.extensions;
     if (prevProps['extensions'] !== newExtensions) {
       if (newExtensions.length !== 0) {
-        this.handleChange(0, newExtensions[0]);
+        this.handleChange(newExtensions[0]);
+      }else{
+        this.handleChange([]);
       }
     }
   }
@@ -163,17 +160,20 @@ class SelectExtension extends React.Component {
       for (var key in extensions) {
         items.push(<option key={key} value={extensions[key]}>{String(key + ':  {' + extensions[key] + '}')}</option>);
       }
-
     } else {
-      items.push(<option key={-1} value={[]}>{String("---")}</option>);
+      items.push(<option key={-1} value={[]}>{String("Not computed")}</option>);
     }
     return items;
   }
 
   render() {
     return (
-      <Form.Control as="select" size="sm" custom key={this.state['selectedExtension']}
-        onChange={(e) => this.handleChange(e.target.key, e.target.value)}
+      <Form.Control as="select" size="sm" custom
+        onChange={(e) =>{
+          const in_array = e.target.value.split(',').map(function(item) {
+            return parseInt(item, 10);
+          });
+          this.handleChange(in_array)}}
         ref={this.refExtension}>
         {this.createSelectItems()}
       </Form.Control>
@@ -208,7 +208,7 @@ class SelectSemantic extends React.Component {
         <option key={3} value="preferred">Preferred</option>
         <option key={4} value="stable">Stable</option>
         <option key={5} value="semistable">Semistable</option>
-        <option key={6} value="allSemantics">All Semantics</option>
+        {/* <option key={6} value="allSemantics">All Semantics</option> */}
       </Form.Control>
     )
   }
@@ -268,12 +268,10 @@ class AppDung extends React.Component {
         'grounded': [],
         'preferred': [],
         'stable': [],
-        'semistable': [],
-        'allSemantics': [],
+        'semistable': []
       },
       'extension': {
         'semantic': 'delp',
-        'id': 0,
         'extension': this.props.dungGraph.delpSemantic
       },
       'solver': 'ArgTech',
@@ -306,7 +304,8 @@ class AppDung extends React.Component {
 
   handleChangeExtension(extension) {
     const selectedSemantic = this.state['selectedSemantic'];
-    this.setState({ 'extension': { 'semantic': selectedSemantic, 'id': extension['id'], 'extension': extension['extension'] } });
+    this.setState({ 'extension': { 'semantic': selectedSemantic, 'extension': extension } });
+    //console.log("Semantic: " + selectedSemantic + ' Id: ' + extension['id'] + 'ext: ' + extension['extension']);
   }
 
   handleSemanticCompute(semanticExtensions) {
@@ -328,12 +327,10 @@ class AppDung extends React.Component {
           'grounded': [],
           'preferred': [],
           'stable': [],
-          'semistable': [],
-          'allSemantics': [],
+          'semistable': []
         },
         'extension': {
           'semantic': 'delp',
-          'id': 0,
           'extension': this.props.dungGraph.delpSemantic
         },
         'solver': 'ArgTech',
@@ -348,7 +345,7 @@ class AppDung extends React.Component {
   render() {
     return (
       <Container fluid style={containersStyleTESTDung}>
-        <Row style={{borderTopStyle:'dotted'}}>
+        <Row style={{}}>
           <Col lg='2' >
             <label>Select Semantic:</label>
             <SelectSemantic handleChangeSemantic={this.handleChangeSemantic} />

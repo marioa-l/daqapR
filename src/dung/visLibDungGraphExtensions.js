@@ -33,12 +33,12 @@ var options = {
 
 // initialize your network!
 function TitleExtension(props){
-    const semantic = props['extensionData']['semantic'];
-    const extensionIndex = props['extensionData']['id'];
-    if (extensionIndex === -1){
-        return <label>{semantic.charAt(0).toUpperCase() + semantic.slice(1)} Extensions not comp.</label>
+    const extension = props['extensionData']['extension'];
+    //const extensionIndex = props['extensionData']['id'];
+    if (extension.lenght === 0){
+        return 'Extensions not comp'
     }else{
-        return <label>{semantic.charAt(0).toUpperCase() + semantic.slice(1)} Extension {extensionIndex}</label>
+        return 'Extension'
     }
 }
 
@@ -80,15 +80,16 @@ class VisNetworkDungGraphExtensions extends React.Component {
     }
 
     updateNetwork(newData) {
-        //console.log("Updating Dung Graph...");
+        console.log("Updating Dung Graph...");
         this.network.setOptions({ layout: { randomSeed: 2 } });
         this.network.setData({ nodes: newData.nodes, edges: newData.arcs });
     }
 
     updateNetworkExtension(extension) {
+        console.log("Draw extensions change", typeof extension['extension']);
         this.network.setOptions({ layout: { randomSeed: 2 } });
         let nodes = this.props.dungGraph.nodes;
-        if (extension['id'] === -1) {
+        if (extension['extension'].length === 0) {
             for (const node of nodes){
                 this.network.body.data.nodes.update([{
                     id: node['id'],
@@ -139,14 +140,15 @@ class VisNetworkDungGraphExtensions extends React.Component {
         if (this.props.extension !== prevProps.extension) {
             this.updateNetworkExtension(this.props.extension);
         }
-        this.network.redraw();
     }
 
     render() {
         return (
-            <div style={{borderStyle:'dotted'}}>
+            <div style={{}}>
+                <div style={{backgroundColor:'LightGray'}}>
                 <TitleExtension extensionData={this.props.extension}/>
-                <div ref={this.myDungGraphNetwork} style={{ height: "80vh" }} />
+                </div>
+                <div ref={this.myDungGraphNetwork} style={{ height: "84vh" }} />
             </div>
         )
     }

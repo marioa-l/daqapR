@@ -1,27 +1,27 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "f0ea41a6bad2c08f8ae8975adee05e1b",
+    "revision": "7b63920dc30077e768899231369f930d",
     "url": "/~daqap/index.html"
   },
   {
-    "revision": "5bbef442bb924d8bce84",
+    "revision": "03720218292cf0ff3626",
     "url": "/~daqap/static/css/2.7d235c77.chunk.css"
   },
   {
-    "revision": "48ff54f936b34f819fa5",
+    "revision": "66867587fc61ac607552",
     "url": "/~daqap/static/css/main.5ecd60fb.chunk.css"
   },
   {
-    "revision": "5bbef442bb924d8bce84",
-    "url": "/~daqap/static/js/2.0e56e04d.chunk.js"
+    "revision": "03720218292cf0ff3626",
+    "url": "/~daqap/static/js/2.7a085bfc.chunk.js"
   },
   {
     "revision": "2c05cd1498996cbd6f5332a130b13e19",
-    "url": "/~daqap/static/js/2.0e56e04d.chunk.js.LICENSE.txt"
+    "url": "/~daqap/static/js/2.7a085bfc.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "48ff54f936b34f819fa5",
-    "url": "/~daqap/static/js/main.c923d15c.chunk.js"
+    "revision": "66867587fc61ac607552",
+    "url": "/~daqap/static/js/main.b0dc540b.chunk.js"
   },
   {
     "revision": "ad090225cc4ee777f6e6",

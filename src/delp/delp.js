@@ -29,7 +29,7 @@ const textAreaProgramStyle = {
   resize: "none",
   fontFamily: "Consolas",
   fontSize: "14px",
-  height: "68vh",
+  height: "70vh",
   marginTop: "5px"
 }
 
@@ -207,20 +207,55 @@ class ProgramMenu extends React.Component {
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this)
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleLoadClick = this.handleLoadClick.bind(this);
+    this.refInput = React.createRef();
   };
+  
   handleChange(optionValue) {
     this.props.handleTextChange(optionValue)
   };
+
+  handleLoadClick(){
+    this.refInput.current.click();
+  }
+
+  handleInputChange(programName){
+    let self = this;
+    console.log(programName);
+    if (programName) {
+        var reader = new FileReader();
+        reader.readAsText(programName, 'utf-8');
+        reader.onload = function (evt) {
+            let program = evt.target.result;
+            self.props.handleTextChange(program)
+        }
+        reader.onerror = function (evt) {
+            alert("error reading file");
+        }
+    }
+  }
 
   render() {
     return (
       <div>
         <Row>
           <Col md="6"><ExamplePrograms handleTextChange={this.handleChange} /></Col>
-          <Col md="6"><Button style={{ backgroundColor: '#337ab7', border: '0px' }} size="sm" block>Load</Button></Col>
+          <Col md="6">
+            <input 
+              type="file"
+              accept=".delp"
+              className="d-none"
+              ref={this.refInput}
+              onChange={(e)=>this.handleInputChange(e.target.files[0])}/>
+              <Button 
+                style={{ backgroundColor: '#337ab7', border: '0px', width:'100%'}} 
+                size="sm"
+                onClick={this.handleLoadClick}>Load</Button>
+          </Col>
         </Row>
         <Row style={{ marginTop: "3px" }}>
-          <Col md="12"><Generators showGeneratedProgram={this.handleChange} /></Col>
+          {/* <Col md="12"><Generators showGeneratedProgram={this.handleChange} /></Col> */}
           {/* <Col md="6"><SelectPreferenceCriterion /></Col> */}
         </Row>
       </div>

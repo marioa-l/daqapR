@@ -33,17 +33,17 @@ class Views extends React.Component{
 
     render() {
         return (
-            <div style={{position: 'fixed',zIndex:999}}>
+            <div style={{position: 'absolute',zIndex:999}}>
             <Accordion defaultActiveKey="1">
                 <Card>
                     <Accordion.Toggle as={Card.Header} eventKey="0" style={{paddingTop:'0px',
                         backgroundColor:'#7c7c7c', color:'white', paddingBottom:'0px'}}>
-                        Options
+                        Views
                     </Accordion.Toggle>
                     <Accordion.Collapse eventKey="0">
                         <Card.Body>
                             <FormGroup>
-                            <label style={{color:'#337ab7', fontSize:'20px'}}>-- Views</label>
+                            {/* <label style={{color:'#337ab7', fontSize:'20px'}}>-- Views</label> */}
                             <Form onChange={this.handleChangeViews}>
                                 <Form.Check
                                     type='checkbox'
@@ -78,7 +78,7 @@ class Views extends React.Component{
                                 />
                             </Form>
                             </FormGroup>
-                            <FormGroup>
+                            {/* <FormGroup>
                                 <label style={{color:'#337ab7', fontSize:'20px'}}>-- DeLP Graph</label>
                                 <Row>
                                     <Col>
@@ -89,7 +89,7 @@ class Views extends React.Component{
                                     </Col>
 
                                 </Row>
-                            </FormGroup>
+                            </FormGroup> */}
                         </Card.Body>
                     </Accordion.Collapse>
                 </Card>

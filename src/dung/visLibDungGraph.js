@@ -62,9 +62,9 @@ class VisNetworkDungGraph extends React.Component{
 
     render(){
         return(
-            <div style={{borderStyle:'dotted'}}>
-            <label>Dung Graph</label>
-                <div ref={this.myDungGraphNetwork} style={{height: "80vh"}}/>
+            <div style={{}}>
+                <div style={{backgroundColor:'LightGray'}}>Dung Graph</div>
+                <div ref={this.myDungGraphNetwork} style={{height: "84vh"}}/>
             </div>
         )
     }

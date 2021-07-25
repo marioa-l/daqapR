@@ -152,10 +152,11 @@ class VisNetworkDeLPGraph extends React.Component{
 
     render(){
         return(
-            <div style={{borderStyle:'dotted'}}>
-            <label>DeLP Graph
+            <div style={{}}>
+            <div style={{backgroundColor:'LightGray'}}>
+            DeLP Graph
             <Views handleViewsChange = {this.defineView}/>
-            </label>
+            </div>
                 <div ref={this.myDeLPGraphNetwork} style={{height: "86vh"}}/>
             </div>
         )

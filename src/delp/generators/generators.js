@@ -12,7 +12,8 @@ const axios = require('axios');
 const textAreaProgramStyle = {
   resize: "none",
   fontFamily: "Consolas",
-  fontSize: "14px"
+  fontSize: "14px",
+  height: '53vh'
 }
 
 const paramsForRandomProgramGen2 = {
@@ -109,61 +110,61 @@ class Generator2Form extends React.Component{
     });
 
   }
-  render(){
-    return(
-        <Form>
+  render() {
+    return (
+      <Form>
         <Form.Row>
-            <Form.Group as={Col} sm={3} controlId="formGridParams">
+          <Form.Group as={Col} sm={3} controlId="formGridParams">
             <h4>Params:</h4>
             <Form.Row>
               <Form.Group as={Col} sm={6}>
-              
-              <Form.Label>Literals:</Form.Label>
-            <Form.Control size="sm" type="number" placeholder="Max number" ref={this.inputPosLit} min="1" step="1"/>
-            
+
+                <Form.Label>Literals:</Form.Label>
+                <Form.Control size="sm" type="number" placeholder="Max number" ref={this.inputPosLit} min="1" step="1" />
+
               </Form.Group>
               <Form.Group as={Col} sm={6}>
-              <Form.Label>~Literals:</Form.Label>
-            <Form.Control size="sm" type="number"  placeholder="Max number" ref={this.inputNegLit} min="1" step="1"/>
+                <Form.Label>~Literals:</Form.Label>
+                <Form.Control size="sm" type="number" placeholder="Max number" ref={this.inputNegLit} min="1" step="1" />
               </Form.Group>
             </Form.Row>
             <Form.Label>Strict Rules:</Form.Label>
-            <Form.Control size="sm" type="number"  placeholder="Max number of strict rules" ref={this.inputMaxSRules} min="1" step="1"/>
+            <Form.Control size="sm" type="number" placeholder="Max number of strict rules" ref={this.inputMaxSRules} min="1" step="1" />
             <Form.Label>Nesting Level:</Form.Label>
-            <Form.Control size="sm" type="number"  placeholder="Association level" ref={this.inputNestingLevel} min="1" step="1"/>
+            <Form.Control size="sm" type="number" placeholder="Association level" ref={this.inputNestingLevel} min="1" step="1" />
             <Form.Label>Bodies:</Form.Label>
-            <Form.Control size="sm" type="number"  placeholder="Association level" ref={this.inputBodyLentgh} min="1" step="1"/>
+            <Form.Control size="sm" type="number" placeholder="Association level" ref={this.inputBodyLentgh} min="1" step="1" />
             <Form.Label>Heads:</Form.Label>
-            <Form.Control size="sm" type="number"  placeholder="Association level" ref={this.inputHeads} min="1" step="1"/>
-            
-            </Form.Group>
-            
-            <Form.Group as={Col} sm={9} controlId="formGridProgram">
+            <Form.Control size="sm" type="number" placeholder="Association level" ref={this.inputHeads} min="1" step="1" />
+
+          </Form.Group>
+
+          <Form.Group as={Col} sm={9} controlId="formGridProgram">
             <h4>Program:</h4>
-            <Form.Control as="textarea" value={this.state.program} spellcheck="false" rows="23" style={textAreaProgramStyle} onChange={(event) => this.handleGeneratedProgram(event.target.value)}/>
-            </Form.Group>
+            <Form.Control as="textarea" value={this.state.program} spellcheck="false" style={textAreaProgramStyle} onChange={(event) => this.handleGeneratedProgram(event.target.value)} />
+          </Form.Group>
         </Form.Row>
         <Form.Row>
-        <Form.Group as={Col} sm={4}>
-        <Button variant="primary" onClick={()=>this.generateClick(this.getParams())}>
-            Generate
-        </Button>
-        <Button variant="primary" onClick={()=>this.generateClick(paramsForRandomProgramGen2)}>
-            Random
-        </Button>
-        </Form.Group>
-        <Form.Group as={Col} sm={8}>
-        <Button variant="primary" style={{float:"right"}} onClick={this.returnProgram}>
-            Ok
-        </Button>
-        </Form.Group>
+          <Form.Group as={Col} sm={4}>
+            <Button variant="primary" onClick={() => this.generateClick(this.getParams())}>
+              Generate
+            </Button>
+            <Button variant="primary" onClick={() => this.generateClick(paramsForRandomProgramGen2)}>
+              Random
+            </Button>
+          </Form.Group>
+          <Form.Group as={Col} sm={8}>
+            <Button variant="primary" style={{ float: "right" }} onClick={this.returnProgram}>
+              Ok
+            </Button>
+          </Form.Group>
         </Form.Row>
-        </Form>
+      </Form>
     )
   }
 }
 
-class Generator1Form extends React.Component{
+/* class Generator1Form extends React.Component{
   constructor(props){
     super(props);
     this.state={
@@ -324,7 +325,7 @@ class Generator1Form extends React.Component{
         </Form>
     )
   }
-}
+} */
 
 function GeneratorsModal(props){
       const [key, setKey] = useState('gen1');
@@ -336,25 +337,25 @@ function GeneratorsModal(props){
       }
 
       return (
-        <Modal size="lg" aria-labelledby="contained-modal-title-vcenter" show={props.show} onHide={props.onHide} centered>
+        <Modal size="lg" aria-labelledby="contained-modal-title-vcenter" show={props.show} onHide={props.onHide} centered style={{height: '95vh'}}>
           <Modal.Header closeButton>
             <Modal.Title id="contained-modal-title-vcenter">
               DeLP Programs Generators
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Tabs
+            {/* <Tabs
               id="controlled-tab-example"
               activeKey={key}
               onSelect={(k) => setKey(k)}
             >
               <Tab eventKey="gen1" title="Generator 1">
                 <Generator1Form program={handleGenProg}/>
-              </Tab>
-              <Tab eventKey="gen2" title="Generator 2">
+              </Tab> */}
+              {/* <Tab eventKey="gen2" title="Generator 2"> */}
                 <Generator2Form program={handleGenProg}/>
-              </Tab>
-            </Tabs>
+              {/* </Tab>
+            </Tabs> */}
           </Modal.Body>
           {/* <Modal.Footer>
             <Button onClick={props.onHide}>Close</Button>
@@ -372,8 +373,8 @@ function GeneratorsModal(props){
     
     return (
       <>
-        <Button style={{backgroundColor:'#337ab7', border:'0px'}} size="sm" onClick={() => setModalShow(true)} block>
-          Generators
+        <Button style={{backgroundColor:'#337ab7', border:'0px'}} size="sm" onClick={() => setModalShow(true)} blocked>
+          Generators (experimental)
         </Button>
   
         <GeneratorsModal
