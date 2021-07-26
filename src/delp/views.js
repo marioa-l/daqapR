@@ -37,7 +37,7 @@ class Views extends React.Component{
             <Accordion defaultActiveKey="1">
                 <Card>
                     <Accordion.Toggle as={Card.Header} eventKey="0" style={{paddingTop:'0px',
-                        backgroundColor:'#7c7c7c', color:'white', paddingBottom:'0px'}}>
+                        backgroundColor:'#FAFAFA', color:'black', paddingBottom:'0px'}}>
                         Views
                     </Accordion.Toggle>
                     <Accordion.Collapse eventKey="0">

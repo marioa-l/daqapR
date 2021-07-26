@@ -2,6 +2,7 @@ import React from "react";
 import { Network } from "vis-network/peer/esm/vis-network";
 import { DataSet } from "vis-data/peer/esm/vis-data"
 import Views from "./views";
+import Container from 'react-bootstrap/Container'
 
 require("vis-network/dist/dist/vis-network.min.css");
 
@@ -152,13 +153,13 @@ class VisNetworkDeLPGraph extends React.Component{
 
     render(){
         return(
-            <div style={{}}>
-            <div style={{backgroundColor:'LightGray'}}>
+            <Container>
+            <div style={{backgroundColor:'#EFEFEF', borderRadius: '5px', paddingLeft:'5px'}}>
             DeLP Graph
+            </div>
             <Views handleViewsChange = {this.defineView}/>
-            </div>
-                <div ref={this.myDeLPGraphNetwork} style={{height: "86vh"}}/>
-            </div>
+                <div ref={this.myDeLPGraphNetwork} style={{height: "86vh", borderStyle:'groove', borderWidth: '0.2px', borderTop: '0'}}/>
+            </Container>
         )
     }
 }

@@ -1,5 +1,6 @@
 import React from "react";
 import { Network } from "vis-network/peer/esm/vis-network";
+import Container from 'react-bootstrap/Container'
 
 require("vis-network/dist/dist/vis-network.min.css");
 
@@ -62,10 +63,10 @@ class VisNetworkDungGraph extends React.Component{
 
     render(){
         return(
-            <div style={{}}>
-                <div style={{backgroundColor:'LightGray'}}>Dung Graph</div>
-                <div ref={this.myDungGraphNetwork} style={{height: "84vh"}}/>
-            </div>
+            <Container>
+                <div style={{backgroundColor:'#EFEFEF', borderRadius: '5px', paddingLeft:'5px'}}>Dung Graph</div>
+                <div ref={this.myDungGraphNetwork} style={{height: "84vh", borderStyle:'groove', borderWidth: '0.2px', borderTop: '0'}}/>
+            </Container>
         )
     }
 }
