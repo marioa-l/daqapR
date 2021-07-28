@@ -1,6 +1,7 @@
 import React from "react";
 import { Network } from "vis-network/peer/esm/vis-network";
 import { DataSet } from "vis-data/peer/esm/vis-data"
+import Container from 'react-bootstrap/Container'
 require("vis-network/dist/dist/vis-network.min.css");
 
 var nodes = new DataSet();
@@ -62,12 +63,12 @@ class VisLibTrees extends React.Component {
 
     render() {
         return (
-            <div style={{}}>
-                <div style={{backgroundColor:'LightGray'}}>
+            <Container>
+                <div style={{backgroundColor:'#EFEFEF', borderRadius: '5px', paddingLeft:'5px'}}>
                 Dialectical Tree
                 </div>
-                <div ref={this.myTreeNetwork} style={{ height: "86vh" }} />
-            </div>
+                <div ref={this.myTreeNetwork} style={{ height: "86vh", borderStyle:'groove', borderWidth: '0.2px', borderTop: '0' }} />
+            </Container>
         )
     }
 }

@@ -1,5 +1,6 @@
 import React from "react";
 import { Network } from "vis-network/peer/esm/vis-network";
+import Container from 'react-bootstrap/Container'
 
 require("vis-network/dist/dist/vis-network.min.css");
 
@@ -32,12 +33,12 @@ var options = {
 };
 
 // initialize your network!
-function TitleExtension(props){
+function TitleExtension(props) {
     const extension = props['extensionData']['extension'];
     //const extensionIndex = props['extensionData']['id'];
-    if (extension.lenght === 0){
+    if (extension.lenght === 0) {
         return 'Extensions not comp'
-    }else{
+    } else {
         return 'Extension'
     }
 }
@@ -51,16 +52,16 @@ class VisNetworkDungGraphExtensions extends React.Component {
         this.handleModalChange = this.handleModalChange.bind(this);
     }
 
-    handleModalChange(value, msg){
+    handleModalChange(value, msg) {
         this.props.handleModalChange(value, msg);
     }
 
-    dungGraphNetworkEvents(){
+    dungGraphNetworkEvents() {
         //let self = this;
         //Here define the associadted events with the network
         this.network.on("click", function (params) {
             let selectedArgument = params.nodes[0];
-            if(selectedArgument){
+            if (selectedArgument) {
                 // To notify when an argument is selected on network
                 //self.selectedArgument = selectedArgument;
                 //self.notifyArgumentSelected();
@@ -90,7 +91,7 @@ class VisNetworkDungGraphExtensions extends React.Component {
         this.network.setOptions({ layout: { randomSeed: 2 } });
         let nodes = this.props.dungGraph.nodes;
         if (extension['extension'].length === 0) {
-            for (const node of nodes){
+            for (const node of nodes) {
                 this.network.body.data.nodes.update([{
                     id: node['id'],
                     color: '#97C2FC'
@@ -103,7 +104,7 @@ class VisNetworkDungGraphExtensions extends React.Component {
                 }]);
             }) */
         } else {
-            for (const node of nodes){
+            for (const node of nodes) {
                 if (extension['extension'].includes(node['id'])) {
                     this.network.body.data.nodes.update([{
                         id: node['id'],
@@ -144,12 +145,12 @@ class VisNetworkDungGraphExtensions extends React.Component {
 
     render() {
         return (
-            <div style={{}}>
-                <div style={{backgroundColor:'LightGray'}}>
-                <TitleExtension extensionData={this.props.extension}/>
+            <Container>
+                <div style={{ backgroundColor: '#EFEFEF', borderRadius: '5px', paddingLeft: '5px' }}>
+                    <TitleExtension extensionData={this.props.extension} />
                 </div>
-                <div ref={this.myDungGraphNetwork} style={{ height: "84vh" }} />
-            </div>
+                <div ref={this.myDungGraphNetwork} style={{ height: "84vh", borderStyle:'groove', borderWidth: '0.2px', borderTop: '0' }} />
+            </Container>
         )
     }
 }

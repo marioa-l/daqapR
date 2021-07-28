@@ -1,25 +1,36 @@
 {
   "files": {
     "main.css": "/~daqap/static/css/main.5ecd60fb.chunk.css",
-    "main.js": "/~daqap/static/js/main.b0dc540b.chunk.js",
-    "main.js.map": "/~daqap/static/js/main.b0dc540b.chunk.js.map",
+    "main.js": "/~daqap/static/js/main.65e00c82.chunk.js",
+    "main.js.map": "/~daqap/static/js/main.65e00c82.chunk.js.map",
     "runtime-main.js": "/~daqap/static/js/runtime-main.cf7ae583.js",
     "runtime-main.js.map": "/~daqap/static/js/runtime-main.cf7ae583.js.map",
     "static/css/2.7d235c77.chunk.css": "/~daqap/static/css/2.7d235c77.chunk.css",
-    "static/js/2.7a085bfc.chunk.js": "/~daqap/static/js/2.7a085bfc.chunk.js",
-    "static/js/2.7a085bfc.chunk.js.map": "/~daqap/static/js/2.7a085bfc.chunk.js.map",
+    "static/js/2.e2db7a17.chunk.js": "/~daqap/static/js/2.e2db7a17.chunk.js",
+    "static/js/2.e2db7a17.chunk.js.map": "/~daqap/static/js/2.e2db7a17.chunk.js.map",
     "index.html": "/~daqap/index.html",
-    "precache-manifest.8986715946fcd2ae8b07e332b34e6ed1.js": "/~daqap/precache-manifest.8986715946fcd2ae8b07e332b34e6ed1.js",
+    "precache-manifest.827b8e30457aa2feb5e8274c9fcf9763.js": "/~daqap/precache-manifest.827b8e30457aa2feb5e8274c9fcf9763.js",
     "service-worker.js": "/~daqap/service-worker.js",
     "static/css/2.7d235c77.chunk.css.map": "/~daqap/static/css/2.7d235c77.chunk.css.map",
     "static/css/main.5ecd60fb.chunk.css.map": "/~daqap/static/css/main.5ecd60fb.chunk.css.map",
-    "static/js/2.7a085bfc.chunk.js.LICENSE.txt": "/~daqap/static/js/2.7a085bfc.chunk.js.LICENSE.txt"
+    "static/js/2.e2db7a17.chunk.js.LICENSE.txt": "/~daqap/static/js/2.e2db7a17.chunk.js.LICENSE.txt",
+    "static/media/legend.png": "/~daqap/static/media/legend.f8063e41.png",
+    "static/media/sectionDelpGraph.png": "/~daqap/static/media/sectionDelpGraph.b643793f.png",
+    "static/media/sectionForDungExtension.png": "/~daqap/static/media/sectionForDungExtension.b81d11c4.png",
+    "static/media/sectionForDungGraph.png": "/~daqap/static/media/sectionForDungGraph.c740f1b5.png",
+    "static/media/sectionProgram.png": "/~daqap/static/media/sectionProgram.a5696edb.png",
+    "static/media/sectionTree.png": "/~daqap/static/media/sectionTree.55c134b4.png",
+    "static/media/sectionTree2.png": "/~daqap/static/media/sectionTree2.25be23d2.png",
+    "static/media/sectionView1.png": "/~daqap/static/media/sectionView1.6d442430.png",
+    "static/media/sectionView2.png": "/~daqap/static/media/sectionView2.d538d827.png",
+    "static/media/sectionView3.png": "/~daqap/static/media/sectionView3.4015112f.png",
+    "static/media/sectionView4.png": "/~daqap/static/media/sectionView4.a1880718.png"
   },
   "entrypoints": [
     "static/js/runtime-main.cf7ae583.js",
     "static/css/2.7d235c77.chunk.css",
-    "static/js/2.7a085bfc.chunk.js",
+    "static/js/2.e2db7a17.chunk.js",
     "static/css/main.5ecd60fb.chunk.css",
-    "static/js/main.b0dc540b.chunk.js"
+    "static/js/main.65e00c82.chunk.js"
   ]
 }

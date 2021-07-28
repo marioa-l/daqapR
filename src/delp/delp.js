@@ -175,7 +175,7 @@ class AnalyzeProgramButton extends React.Component {
 
   handleOnClick() {
     let self = this;
-    this.handleModalChange(true, 'Analyzaing program...');
+    this.handleModalChange(true, 'Analyzing program...');
     let delpProgram = this.props.program;
     let parserProgram = self.parseProgram(delpProgram);
     let formData = new FormData();
