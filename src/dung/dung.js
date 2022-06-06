@@ -11,7 +11,7 @@ import Modal from 'react-bootstrap/Modal'
 import Spinner from 'react-bootstrap/Spinner'
 
 //const URLtoDungSolvers = 'http://localhost/daqapClient/bridge/callSolver.php';
-const URLtoDungSolvers = 'https://hosting.cs.uns.edu.ar/~daqap/bridge/callSolver.php';
+const URLtoDungSolvers = 'https://hosting.cs.uns.edu.ar/~daqap/bridge/bridge.php';
 
 const axios = require('axios');
 
@@ -96,7 +96,7 @@ class QuerySemantic extends React.Component {
       }
       formData.append('semantics', this.props.selectedSemantic);
       formData.append('solver', this.props.selectedSolver);
-      formData.append('action', 'solver');
+      formData.append('action', 'consultExtensions');
       //Show a loader?
       axios.post(URLtoDungSolvers, formData)
         .then(function (response) {
