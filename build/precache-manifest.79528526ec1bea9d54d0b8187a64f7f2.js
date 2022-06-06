@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "0a2bb7ab3ec2f475f64518d0703e2231",
+    "revision": "efe8eb55cc56b51af82c6187bc4062f2",
     "url": "/~daqap/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/~daqap/static/css/2.01912d60.chunk.css"
   },
   {
-    "revision": "20d64393afa2f3845814",
+    "revision": "ebd18a7841c54bf53d71",
     "url": "/~daqap/static/css/main.5ecd60fb.chunk.css"
   },
   {
@@ -20,8 +20,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/~daqap/static/js/2.e2db7a17.chunk.js.LICENSE.txt"
   },
   {
-    "revision": "20d64393afa2f3845814",
-    "url": "/~daqap/static/js/main.017bf8e5.chunk.js"
+    "revision": "ebd18a7841c54bf53d71",
+    "url": "/~daqap/static/js/main.6af5b520.chunk.js"
   },
   {
     "revision": "ad090225cc4ee777f6e6",

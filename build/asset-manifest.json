@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/~daqap/static/css/main.5ecd60fb.chunk.css",
-    "main.js": "/~daqap/static/js/main.017bf8e5.chunk.js",
-    "main.js.map": "/~daqap/static/js/main.017bf8e5.chunk.js.map",
+    "main.js": "/~daqap/static/js/main.6af5b520.chunk.js",
+    "main.js.map": "/~daqap/static/js/main.6af5b520.chunk.js.map",
     "runtime-main.js": "/~daqap/static/js/runtime-main.cf7ae583.js",
     "runtime-main.js.map": "/~daqap/static/js/runtime-main.cf7ae583.js.map",
     "static/css/2.01912d60.chunk.css": "/~daqap/static/css/2.01912d60.chunk.css",
     "static/js/2.e2db7a17.chunk.js": "/~daqap/static/js/2.e2db7a17.chunk.js",
     "static/js/2.e2db7a17.chunk.js.map": "/~daqap/static/js/2.e2db7a17.chunk.js.map",
     "index.html": "/~daqap/index.html",
-    "precache-manifest.e259299613131a48dd9f30fbfa5b1c55.js": "/~daqap/precache-manifest.e259299613131a48dd9f30fbfa5b1c55.js",
+    "precache-manifest.79528526ec1bea9d54d0b8187a64f7f2.js": "/~daqap/precache-manifest.79528526ec1bea9d54d0b8187a64f7f2.js",
     "service-worker.js": "/~daqap/service-worker.js",
     "static/css/2.01912d60.chunk.css.map": "/~daqap/static/css/2.01912d60.chunk.css.map",
     "static/css/main.5ecd60fb.chunk.css.map": "/~daqap/static/css/main.5ecd60fb.chunk.css.map",
@@ -31,6 +31,6 @@
     "static/css/2.01912d60.chunk.css",
     "static/js/2.e2db7a17.chunk.js",
     "static/css/main.5ecd60fb.chunk.css",
-    "static/js/main.017bf8e5.chunk.js"
+    "static/js/main.6af5b520.chunk.js"
   ]
 }

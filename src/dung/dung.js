@@ -204,10 +204,10 @@ class SelectSemantic extends React.Component {
         onChange={(e) => this.handleChange(e.target.value)}
         ref={this.refExample}>
         <option key={1} value="delp">DeLP</option>
-        <option key={2} value="grounded">Grounded</option>
+        <option key={2} value="complete">Complete</option>
         <option key={3} value="preferred">Preferred</option>
         <option key={4} value="stable">Stable</option>
-        <option key={5} value="semistable">Semistable</option>
+        <option key={5} value="admissible">Admissible</option>
         {/* <option key={6} value="allSemantics">All Semantics</option> */}
       </Form.Control>
     )
