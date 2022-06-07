@@ -16,48 +16,48 @@ const URLtoDungSolvers = 'https://hosting.cs.uns.edu.ar/~daqap/bridge/bridge.php
 const axios = require('axios');
 
 const containersStyleTESTDung = {
-  marginTop: "5px",
+  marginTop: "10px",
   width: "100%"
 }
 
-class ModalDung extends React.Component{
-  constructor(props){
+class ModalDung extends React.Component {
+  constructor(props) {
     super(props);
     this.state = {
-      modalInfo:{
+      modalInfo: {
         visible: false,
-        msg:''
+        msg: ''
       }
     };
   }
 
-  componentDidUpdate(prevProps){
+  componentDidUpdate(prevProps) {
     const visible = this.props.modalInfo.visible;
     const msg = this.props.modalInfo.msg;
-    if (visible !== prevProps.modalInfo.visible){
-      this.setState({modalInfo: {visible: visible, msg: msg}})
+    if (visible !== prevProps.modalInfo.visible) {
+      this.setState({ modalInfo: { visible: visible, msg: msg } })
     }
   }
 
-  render(){
+  render() {
     return (
       <>
-      <Modal
-      show={this.state.modalInfo['visible']}
-      size="sm"
-      centered
-    >
-      <Modal.Header>
-      </Modal.Header>
-      <Modal.Body>
-        <p className="text-center">
-        {this.state.modalInfo['msg']}
-        <Spinner animation="grow" size='sm' variant="primary"/>
-        </p>
-      </Modal.Body>
-      <Modal.Footer>
-      </Modal.Footer>
-    </Modal>
+        <Modal
+          show={this.state.modalInfo['visible']}
+          size="sm"
+          centered
+        >
+          <Modal.Header>
+          </Modal.Header>
+          <Modal.Body>
+            <p className="text-center">
+              {this.state.modalInfo['msg']}
+              <Spinner animation="grow" size='sm' variant="primary" />
+            </p>
+          </Modal.Body>
+          <Modal.Footer>
+          </Modal.Footer>
+        </Modal>
       </>
     );
   }
@@ -73,7 +73,7 @@ class QuerySemantic extends React.Component {
     this.handleModalChange = this.handleModalChange.bind(this);
   }
 
-  handleModalChange(value, msg){
+  handleModalChange(value, msg) {
     this.props.handleModalChange(value, msg);
   }
 
@@ -101,7 +101,8 @@ class QuerySemantic extends React.Component {
       axios.post(URLtoDungSolvers, formData)
         .then(function (response) {
           console.log("Solver Response: ", response['data']);
-          let extensions = response['data'][semantic];
+          let extensions = response['data'];
+          //let extensions = response['data'][semantic];
           if (Array.isArray(extensions[0])) {
             let toNumberFormat = extensions.map((extension) => {
               return extension.map(Number);
@@ -123,7 +124,7 @@ class QuerySemantic extends React.Component {
 
   render() {
     return (
-      <Button style={{ backgroundColor: '#337ab7', border: '0px' , marginTop:'28px'}} size="md" block onClick={this.handleOnClick} ref={this.AnalyzeButtonRef}>
+      <Button style={{ backgroundColor: '#337ab7', border: '0px', marginTop: '28px' }} size="md" block onClick={this.handleOnClick} ref={this.AnalyzeButtonRef}>
         Query
       </Button>
     )
@@ -147,7 +148,7 @@ class SelectExtension extends React.Component {
     if (prevProps['extensions'] !== newExtensions) {
       if (newExtensions.length !== 0) {
         this.handleChange(newExtensions[0]);
-      }else{
+      } else {
         this.handleChange([]);
       }
     }
@@ -156,6 +157,7 @@ class SelectExtension extends React.Component {
   createSelectItems() {
     let items = [];
     let extensions = this.props.extensions;
+    //console.log("Esta es la nueva extensión seleccionada: " + extensions);
     if (extensions.length !== 0) {
       for (var key in extensions) {
         items.push(<option key={key} value={extensions[key]}>{String(key + ':  {' + extensions[key] + '}')}</option>);
@@ -169,11 +171,12 @@ class SelectExtension extends React.Component {
   render() {
     return (
       <Form.Control as="select" size="sm" custom
-        onChange={(e) =>{
-          const in_array = e.target.value.split(',').map(function(item) {
+        onChange={(e) => {
+          const in_array = e.target.value.split(',').map(function (item) {
             return parseInt(item, 10);
           });
-          this.handleChange(in_array)}}
+          this.handleChange(in_array)
+        }}
         ref={this.refExtension}>
         {this.createSelectItems()}
       </Form.Control>
@@ -265,10 +268,10 @@ class AppDung extends React.Component {
       'selectedSemantic': 'delp',
       'semantics': {
         'delp': [this.props.dungGraph.delpSemantic],
-        'grounded': [],
+        'complete': [],
         'preferred': [],
         'stable': [],
-        'semistable': []
+        'admissible': []
       },
       'extension': {
         'semantic': 'delp',
@@ -287,11 +290,13 @@ class AppDung extends React.Component {
     this.handleModalChange = this.handleModalChange.bind(this);
   };
 
-  handleModalChange(value,msg){
-    this.setState({modalInfo: {
-      visible: value,
-      msg: msg
-    }});
+  handleModalChange(value, msg) {
+    this.setState({
+      modalInfo: {
+        visible: value,
+        msg: msg
+      }
+    });
   }
 
   handleChangeSemantic(newSemantic) {
@@ -317,17 +322,17 @@ class AppDung extends React.Component {
 
   componentDidUpdate(prevProps) {
     const newDungGrapg = this.props.dungGraph.argumentsDung;
-    if (prevProps.dungGraph.argumentsDung !== newDungGrapg){
+    if (prevProps.dungGraph.argumentsDung !== newDungGrapg) {
       this.setState({
         dungGraph: { 'nodes': this.props.dungGraph.argumentsObjectDung, 'arcs': this.props.dungGraph.defeatsObjectDung },
         solverData: { 'args': this.props.dungGraph.argumentsDung, 'attacks': this.props.dungGraph.attacksDung },
         'selectedSemantic': 'delp',
         'semantics': {
           'delp': [this.props.dungGraph.delpSemantic],
-          'grounded': [],
+          'complete': [],
           'preferred': [],
           'stable': [],
-          'semistable': []
+          'admissible': []
         },
         'extension': {
           'semantic': 'delp',
@@ -344,14 +349,14 @@ class AppDung extends React.Component {
 
   render() {
     return (
-      <Container fluid style={containersStyleTESTDung}>
+      <Container fluid>
         <Row style={{}}>
           <Col lg='2' >
             <label>Select Semantic:</label>
             <SelectSemantic handleChangeSemantic={this.handleChangeSemantic} />
           </Col>
           <Col lg='3'>
-            <SelectSolver handleChangeSolver={this.handleChangeSolver} />
+            {/* <SelectSolver handleChangeSolver={this.handleChangeSolver} /> */}
           </Col>
           <Col lg='2'>
             <QuerySemantic selectedSemantic={this.state['selectedSemantic']}
@@ -359,9 +364,9 @@ class AppDung extends React.Component {
               args={this.state['solverData']['args']}
               attacks={this.state['solverData']['attacks']}
               semantics={this.state['semantics']}
-              handleSemanticCompute={this.handleSemanticCompute} 
-              handleModalChange = {this.handleModalChange}/>
-              <ModalDung modalInfo={this.state.modalInfo}/>
+              handleSemanticCompute={this.handleSemanticCompute}
+              handleModalChange={this.handleModalChange} />
+            <ModalDung modalInfo={this.state.modalInfo} />
           </Col>
           <Col lg='4'>
             <label>Select Extension:</label>
@@ -370,12 +375,12 @@ class AppDung extends React.Component {
           </Col>
         </Row>
         <Row>
-          <Col lg="6">
+          <Col lg='6' style={containersStyleTESTDung}>
             <VisNetworkDungGraph dungGraph={this.state['dungGraph']} />
           </Col>
-          <Col lg="6">
+          <Col lg='6' style={containersStyleTESTDung}>
             <VisNetworkDungGraphExtensions dungGraph={this.state['dungGraph']}
-              extension={this.state['extension']} handleModalChange={this.handleModalChange}/>
+              extension={this.state['extension']} handleModalChange={this.handleModalChange} />
           </Col>
         </Row>
       </Container>

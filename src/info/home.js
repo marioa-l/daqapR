@@ -51,7 +51,7 @@ function HomeComponent() {
           </p>
         </Col>
         <Col lg='6'>
-          <img src={sectionLegend} style={{borderRadius:'15px'}}></img>
+          <img src={sectionLegend} style={{ borderRadius: '15px' }}></img>
         </Col>
       </Row>
       <Row style={{ borderTop: 'groove 1px', paddingTop: '10px', color: '#525252' }}>
@@ -80,7 +80,7 @@ function HomeComponent() {
           <Row>
             <Col lg='6'><img src={sectionTree}></img></Col>
             <Col lg='6'>
-              <img src={sectionTree2} style={{ width: "40vh", paddingTop: '50%' }}></img>
+              <img src={sectionTree2} style={{ width: "29vh", paddingTop: '50%' }}></img>
             </Col>
           </Row>
         </Col>
@@ -88,12 +88,12 @@ function HomeComponent() {
       <Row style={{ borderTop: 'groove 1px', paddingTop: '10px' }}>
         <Col lg='6'>
           <Row>
-            <Col lg='6'><img src={sectionView1} style={{ width: "40vh", height: "40vh" }}></img></Col>
-            <Col lg='6'><img src={sectionView2} style={{ width: "40vh", height: "40vh" }}></img></Col>
+            <Col lg='6'><img src={sectionView1} style={{ width: "30vh", height: "30vh" }}></img></Col>
+            <Col lg='6'><img src={sectionView2} style={{ width: "30vh", height: "30vh" }}></img></Col>
           </Row>
           <Row>
-            <Col lg='6'><img src={sectionView3} style={{ width: "40vh", height: "40vh" }}></img></Col>
-            <Col lg='6'><img src={sectionView4} style={{ width: "40vh", height: "40vh" }}></img></Col>
+            <Col lg='6'><img src={sectionView3} style={{ width: "30vh", height: "30vh" }}></img></Col>
+            <Col lg='6'><img src={sectionView4} style={{ width: "30vh", height: "30vh" }}></img></Col>
           </Row>
         </Col>
         <Col lg='6'>

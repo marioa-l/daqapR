@@ -64,7 +64,7 @@ class VisNetworkDungGraph extends React.Component{
     render(){
         return(
             <Container>
-                <div style={{backgroundColor:'#EFEFEF', borderRadius: '5px', paddingLeft:'5px'}}>Dung Graph</div>
+                <div style={{backgroundColor:'#EFEFEF', borderRadius: '5px', paddingLeft:'0px'}}>Dung Graph</div>
                 <div ref={this.myDungGraphNetwork} style={{height: "84vh", borderStyle:'groove', borderWidth: '0.2px', borderTop: '0'}}/>
             </Container>
         )

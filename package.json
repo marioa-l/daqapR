@@ -2,7 +2,7 @@
   "name": "boot",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://hosting.cs.uns.edu.ar/~daqap",
+  "homepage": "https://hosting.cs.uns.edu.ar/~daqap/",
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
