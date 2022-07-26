@@ -154,7 +154,7 @@ class VisNetworkDeLPGraph extends React.Component{
     render(){
         return(
             <Container>
-            <div style={{backgroundColor:'#EFEFEF', borderRadius: '5px', paddingLeft:'5px'}}>
+            <div style={{backgroundColor:'#EFEFEF', borderRadius: '0px', paddingLeft:'5px',borderStyle:'groove', borderWidth: '0.2px', borderBottom: '0'}}>
             DeLP Graph
             </div>
             <Views handleViewsChange = {this.defineView}/>

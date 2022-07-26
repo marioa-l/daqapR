@@ -43,6 +43,24 @@ function TitleExtension(props) {
     }
 }
 
+function getNotAttacksArgs(nodes, arcs) {
+    let nodes_id = [];
+    for(const node of nodes) {
+        let id = node['id'];
+        let flag = false;
+        for(const arc of arcs) {
+            if (id === arc['from'] || id === arc['to']){
+                flag = true;
+                break;
+            }
+        }
+        if (!flag) {
+            nodes_id.push(id);
+        }
+    }
+    return nodes_id;
+}
+
 class VisNetworkDungGraphExtensions extends React.Component {
     constructor(props) {
         super(props);
@@ -50,6 +68,7 @@ class VisNetworkDungGraphExtensions extends React.Component {
         this.updateNetwork = this.updateNetwork.bind(this);
         this.network = {};
         this.handleModalChange = this.handleModalChange.bind(this);
+        this.notInAttacks = [];
     }
 
     handleModalChange(value, msg) {
@@ -77,20 +96,21 @@ class VisNetworkDungGraphExtensions extends React.Component {
         this.network = new Network(this.myDungGraphNetwork.current, { nodes: this.props.dungGraph.nodes, edges: this.props.dungGraph.arcs }, options);
         this.updateNetworkExtension(this.props.extension);
         this.dungGraphNetworkEvents();
-
     }
 
     updateNetwork(newData) {
         console.log("Updating Dung Graph...");
         this.network.setOptions({ layout: { randomSeed: 2 } });
         this.network.setData({ nodes: newData.nodes, edges: newData.arcs });
+        this.notInAttacks = getNotAttacksArgs(newData.nodes, newData.arcs);
     }
 
-    updateNetworkExtension(extension) {
-        console.log("Draw extensions change", typeof extension['extension']);
+    updateNetworkExtension(extensionOriginal) {
+        console.log("Draw extensions change", typeof extensionOriginal['extension']);
         this.network.setOptions({ layout: { randomSeed: 2 } });
         let nodes = this.props.dungGraph.nodes;
-        if (extension['extension'].length === 0) {
+        let extension = extensionOriginal['extension'].concat(this.notInAttacks);
+        if (extension.lenght === 0) {
             for (const node of nodes) {
                 this.network.body.data.nodes.update([{
                     id: node['id'],
@@ -105,7 +125,7 @@ class VisNetworkDungGraphExtensions extends React.Component {
             }) */
         } else {
             for (const node of nodes) {
-                if (extension['extension'].includes(node['id'])) {
+                if (extension.includes(node['id'])) {
                     this.network.body.data.nodes.update([{
                         id: node['id'],
                         color: '#33FF6B'

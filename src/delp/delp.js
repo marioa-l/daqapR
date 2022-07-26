@@ -29,8 +29,8 @@ const textAreaProgramStyle = {
   resize: "none",
   fontFamily: "Consolas",
   fontSize: "14px",
-  height: "70vh",
-  marginTop: "5px"
+  height: "78vh",
+  marginTop: "5px",
 }
 
 class ModalDeLP extends React.Component{
@@ -249,9 +249,9 @@ class ProgramMenu extends React.Component {
               ref={this.refInput}
               onChange={(e)=>this.handleInputChange(e.target.files[0])}/>
               <Button 
-                style={{ backgroundColor: '#337ab7', border: '0px', width:'100%'}} 
+                style={{ backgroundColor: '#EFEFEF', border: '0px', width:'100%', color:'black'}} 
                 size="sm"
-                onClick={this.handleLoadClick}>Load</Button>
+                onClick={this.handleLoadClick}>Load from PC</Button>
           </Col>
         </Row>
         <Row style={{ marginTop: "3px" }}>
@@ -361,13 +361,13 @@ class AppDeLP extends React.Component {
       <Container fluid>
         <Row style={{height: "95vh"}}>
           <Col lg="3" style={containersStyleTEST}>
-            <label>Program</label>
+            <label style={{backgroundColor:'#EFEFEF', width:'100%', textAlign:'center'}}>Program</label>
             <ProgramMenu handleTextChange={this.handleProgramChange} />
-            <TextAreaProgram value={this.state.delpProgram}
-              handleTextChange={this.handleProgramChange} />
             <AnalyzeProgramButton program={this.state.delpProgram}
               handleResponse={this.handleResponse} 
               handleModalChange={this.handleModalChange}/>
+            <TextAreaProgram value={this.state.delpProgram}
+              handleTextChange={this.handleProgramChange} />
             <ModalDeLP modalInfo={this.state.modalInfo}/>  
           </Col>
           <Col lg="5" style={containersStyleTEST}>

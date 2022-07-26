@@ -355,9 +355,9 @@ class AppDung extends React.Component {
             <label>Select Semantic:</label>
             <SelectSemantic handleChangeSemantic={this.handleChangeSemantic} />
           </Col>
-          <Col lg='3'>
-            {/* <SelectSolver handleChangeSolver={this.handleChangeSolver} /> */}
-          </Col>
+          {/* <Col lg='3'>
+            <SelectSolver handleChangeSolver={this.handleChangeSolver} />
+          </Col> */}
           <Col lg='2'>
             <QuerySemantic selectedSemantic={this.state['selectedSemantic']}
               selectedSolver={this.state['solver']}
@@ -367,6 +367,9 @@ class AppDung extends React.Component {
               handleSemanticCompute={this.handleSemanticCompute}
               handleModalChange={this.handleModalChange} />
             <ModalDung modalInfo={this.state.modalInfo} />
+          </Col>
+          <Col lg='4'>
+            {/* <SelectSolver handleChangeSolver={this.handleChangeSolver} /> */}
           </Col>
           <Col lg='4'>
             <label>Select Extension:</label>

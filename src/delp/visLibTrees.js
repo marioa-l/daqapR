@@ -64,7 +64,7 @@ class VisLibTrees extends React.Component {
     render() {
         return (
             <Container>
-                <div style={{backgroundColor:'#EFEFEF', borderRadius: '5px', paddingLeft:'5px'}}>
+                <div style={{backgroundColor:'#EFEFEF', borderRadius: '0px', paddingLeft:'5px',borderStyle:'groove', borderWidth: '0.2px', borderBottom: '0'}}>
                 Dialectical Tree
                 </div>
                 <div ref={this.myTreeNetwork} style={{ height: "86vh", borderStyle:'groove', borderWidth: '0.2px', borderTop: '0' }} />
